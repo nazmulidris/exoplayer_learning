@@ -20,16 +20,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import kotlinx.android.synthetic.main.activity_audio.*
 
 class AudioActivity : AppCompatActivity() {
 
-    lateinit var exoPlayer: ExoPlayer
+    lateinit var exoPlayer: SimpleExoPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +53,15 @@ class AudioActivity : AppCompatActivity() {
         val trackSelector = DefaultTrackSelector()
         exoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector)
 
+        // Bind to the view
+        exoplayerview_activity_audio.player = exoPlayer
+
         // Pick the media to play
         val userAgent = Util.getUserAgent(this, this.javaClass.simpleName)
-        val uri = Uri.parse("asset:///cielo.mp3")
+
+        val uri = Uri.parse("asset:///audio/cielo.mp3")
+        //val uri = Uri.parse("file:///android_asset/audio/cielo.mp3")
+
         val mediaSource = ExtractorMediaSource
                 .Factory(DefaultDataSourceFactory(this, userAgent))
                 .createMediaSource(uri)

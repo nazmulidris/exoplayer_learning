@@ -44,7 +44,9 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // ExoPlayer2
-    implementation "com.google.android.exoplayer:exoplayer:$exoplayer2_version"
+    //implementation "com.google.android.exoplayer:exoplayer:$exoplayer2_version"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer2_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer2_version"
 
     // Material Design Components
     implementation 'com.android.support:design:26.1.0'

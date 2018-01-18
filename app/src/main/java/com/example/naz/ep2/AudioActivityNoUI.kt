@@ -26,16 +26,14 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import kotlinx.android.synthetic.main.activity_video.*
-import org.jetbrains.anko.AnkoLogger
 
-class VideoActivity : AppCompatActivity(), AnkoLogger {
+class AudioActivityNoUI : AppCompatActivity() {
 
     lateinit var exoPlayer: SimpleExoPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video)
+        setContentView(R.layout.activity_audio_no_ui)
     }
 
     override fun onResume() {
@@ -48,24 +46,17 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         releasePlayer()
     }
 
-    /**
-     * [com.google.android.exoplayer2.upstream.DefaultDataSource]
-     * [javadoc](https://goo.gl/kQ6Cnb)
-     */
     fun initPlayer() {
         // Create the player
         val renderersFactory = DefaultRenderersFactory(this, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF)
         val trackSelector = DefaultTrackSelector()
         exoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector)
 
-        // Bind to the view
-        exoplayerview_activity_video.player = exoPlayer
-
         // Pick the media to play
         val userAgent = Util.getUserAgent(this, this.javaClass.simpleName)
 
-        val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")
-        //val uri = Uri.parse("asset:///video/stock_footage_video.mp4")
+        val uri = Uri.parse("asset:///audio/cielo.mp3")
+        //val uri = Uri.parse("file:///android_asset/audio/cielo.mp3")
 
         val mediaSource = ExtractorMediaSource
                 .Factory(DefaultDataSourceFactory(this, userAgent))

@@ -21,32 +21,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.naz.ep2.MainActivity"
-    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteY="25dp"
     android:id="@+id/layout_main_activity_container">
 
     <Button
-        android:text="music"
+        android:text="music 1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/button_main_activity_music"
+        android:id="@+id/button_main_activity_music1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toStartOf="@+id/button_main_activity_video"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/button_main_activity_music2"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_main_activity"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main_activity" />
+
+    <Button
+        android:text="music 2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_main_activity_music2"
+        app:layout_constraintStart_toEndOf="@+id/button_main_activity_music1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/button_main_activity_video"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main_activity" />
 
     <Button
         android:text="video"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/button_main_activity_video"
-        app:layout_constraintTop_toTopOf="@+id/button_main_activity_music"
-        app:layout_constraintStart_toEndOf="@+id/button_main_activity_music"
+        app:layout_constraintStart_toEndOf="@+id/button_main_activity_music2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main_activity" />
 
     <android.support.v7.widget.Toolbar
         app:title="ExoPlayer2"
@@ -56,8 +65,8 @@
         android:theme="?attr/actionBarTheme"
         android:minHeight="?attr/actionBarSize"
         android:id="@+id/toolbar_main_activity"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

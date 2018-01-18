@@ -28,7 +28,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        button_main_activity_music.onClick {
+        button_main_activity_music1.onClick {
+            startActivity(intentFor<AudioActivityNoUI>().singleTop())
+        }
+        button_main_activity_music2.onClick {
             startActivity(intentFor<AudioActivity>().singleTop())
         }
         button_main_activity_video.onClick {

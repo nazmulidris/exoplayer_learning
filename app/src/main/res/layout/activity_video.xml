@@ -15,18 +15,10 @@
   ~ limitations under the License.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.exoplayer2.ui.SimpleExoPlayerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exoplayerview_activity_video"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.naz.ep2.VideoActivity">
-
-    <TextView
-        android:text="Video Playback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteY="274dp"
-        tools:layout_editor_absoluteX="163dp"
-        android:id="@+id/textView2" />
-</android.support.constraint.ConstraintLayout>
+    android:keepScreenOn="true"/>
