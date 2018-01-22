@@ -13,7 +13,13 @@ allows local files to be loaded via the following URIs:
 - `http(s)`
 
 Note that loading files from `Uri.parse("android.resource://${packageName}/${R.raw.id})"` 
-is not allowed.
+is not allowed. Also note that you can't add folders in the `res` folder.
+
+Note that you can load files from `assets` in the following ways (you can have nested 
+under `assets` folders):
+- `val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
+- `val uri = Uri.parse("asset:///video/stock_footage_video.mp4")`
+
 
 ## Audio, Video Playback
 - [ ] [IO17 ExoPlayer2 Session](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
