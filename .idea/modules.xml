@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/exoplayer_learning.iml" filepath="$PROJECT_DIR$/exoplayer_learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/videoplayerapp/app.iml" filepath="$PROJECT_DIR$/videoplayerapp/app.iml" />
     </modules>
   </component>
 </project>
