@@ -19,7 +19,6 @@ package com.example.naz.ep2
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -54,9 +53,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
      */
     fun initPlayer() {
         // Create the player
-        val renderersFactory = DefaultRenderersFactory(this, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF)
-        val trackSelector = DefaultTrackSelector()
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector)
+        exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
 
         // Bind to the view
         exoplayerview_activity_video.player = exoPlayer
