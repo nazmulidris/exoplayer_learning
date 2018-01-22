@@ -47,10 +47,6 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         releasePlayer()
     }
 
-    /**
-     * [com.google.android.exoplayer2.upstream.DefaultDataSource]
-     * [javadoc](https://goo.gl/kQ6Cnb)
-     */
     fun initPlayer() {
         // Create the player
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
