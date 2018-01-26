@@ -20,6 +20,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -27,6 +28,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_video.*
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+
 
 class VideoActivity : AppCompatActivity(), AnkoLogger {
 
@@ -67,6 +70,23 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         // Tell the player to play the media
         exoPlayer.prepare(mediaSource)
         exoPlayer.playWhenReady = true
+
+        // Attach logging
+        exoPlayer.addListener(object : Player.DefaultEventListener() {
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                info { "playerStateChanged: ${getStateString(playbackState)}, $playWhenReady" }
+            }
+
+            fun getStateString(state: Int): String {
+                when (state) {
+                    Player.STATE_BUFFERING -> return "STATE_BUFFERING"
+                    Player.STATE_ENDED -> return "STATE_ENDED"
+                    Player.STATE_IDLE -> return "STATE_IDLE"
+                    Player.STATE_READY -> return "STATE_READY"
+                    else -> return "?"
+                }
+            }
+        })
     }
 
     fun releasePlayer() = exoPlayer.release()

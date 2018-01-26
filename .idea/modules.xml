@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/exoplayer_learning.iml" filepath="$PROJECT_DIR$/exoplayer_learning.iml" />
-      <module fileurl="file://$PROJECT_DIR$/videoplayerapp/app.iml" filepath="$PROJECT_DIR$/videoplayerapp/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/videoplayerapp/videoplayerapp.iml" filepath="$PROJECT_DIR$/videoplayerapp/videoplayerapp.iml" />
     </modules>
   </component>
 </project>
