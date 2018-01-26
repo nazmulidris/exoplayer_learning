@@ -19,9 +19,9 @@ package com.example.naz.ep2
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.audio.AudioRendererEventListener
+import com.google.android.exoplayer2.decoder.DecoderCounters
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -77,6 +77,10 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
                 info { "playerStateChanged: ${getStateString(playbackState)}, $playWhenReady" }
             }
 
+            override fun onPlayerError(error: ExoPlaybackException?) {
+                info { "playerError: $error" }
+            }
+
             fun getStateString(state: Int): String {
                 when (state) {
                     Player.STATE_BUFFERING -> return "STATE_BUFFERING"
@@ -87,6 +91,31 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
                 }
             }
         })
+
+        exoPlayer.addAudioDebugListener(object: AudioRendererEventListener {
+            override fun onAudioSinkUnderrun(bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) {
+            }
+
+            override fun onAudioEnabled(counters: DecoderCounters?) {
+            }
+
+            override fun onAudioInputFormatChanged(format: Format?) {
+            }
+
+            override fun onAudioSessionId(audioSessionId: Int) {
+                info { "onAudioSessionId $audioSessionId" }
+            }
+
+            override fun onAudioDecoderInitialized(decoderName: String?, initializedTimestampMs: Long, initializationDurationMs: Long) {
+            }
+
+            override fun onAudioDisabled(counters: DecoderCounters?) {
+            }
+        })
+
+        exoPlayer.addMetadataOutput{
+            info{ "metaDataOutput: $it" }
+        }
     }
 
     fun releasePlayer() = exoPlayer.release()
