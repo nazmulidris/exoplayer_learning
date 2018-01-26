@@ -20,9 +20,9 @@ under `assets` folders):
 - `val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
 - `val uri = Uri.parse("asset:///video/stock_footage_video.mp4")`
 
-
 ## Audio, Video Playback
-- [ ] [IO17 ExoPlayer2 Session](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
+- [ ] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
+- [ ] [IO17 ExoPlayer2 Session Video](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
 - [ ] [Caster.io course on ExoPlayer2](https://goo.gl/EeuZi1)
 - [ ] [ExoPlayer2 for audio, video playback sample](https://goo.gl/1d4bkY)
 - [ ] [ExoPlayer2 play audio + video](https://goo.gl/eVbEoD)
