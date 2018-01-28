@@ -52,24 +52,24 @@ under `assets` folders):
 
 ## Quick start for player creation
 
-At a minimum, in order to create a SimpleExoPlayer you will need to provide a track selector 
+At a minimum, in order to create a `SimpleExoPlayer` you will need to provide a track selector 
 (which chooses which track of audio, video, or text to load from your media source, based on 
 bandwidth, devices, capabilities, language, etc). 
 
 You will need to create a MediaSource, which tells player where to load media from. 
 Sources of media can be the asset folder in your APK, or over HTTP, for regular media 
-files (mp3, mp4, webm, mkv, etc). You cna use the ExtractorMediaSource to handle these 
-sources and formats. For adaptive formats, you can use DashMediaSource (for DASH sources), 
-SsMediaSource (for SmoothStreaming sources), and HlsMediaSource (for HLS sources).
+files (mp3, mp4, webm, mkv, etc). You cna use the `ExtractorMediaSource` to handle these 
+sources and formats. For adaptive formats, you can use `DashMediaSource` (for DASH sources), 
+`SsMediaSource` (for SmoothStreaming sources), and `HlsMediaSource` (for HLS sources).
 
-You have to provide a URI that points to your media content, which is used by the 
-MediaSource to actually load and prepare the content for playback.
+You have to provide a `URI` that points to your media content, which is used by the 
+`MediaSource` to actually load and prepare the content for playback.
 
 You must also prepare the player, which tells it to start loading the data (and it might
-have to buffer this data over the network). You also have to set a flag "playWhenReady". 
+have to buffer this data over the network). You also have to set a flag `playWhenReady`. 
 true means play, and false means pause playback (after enough content has been buffered).
 
-Finally, you have to attach the player to a SimpleExoPlayerView - displays audio / video 
+Finally, you have to attach the player to a `SimpleExoPlayerView` - displays audio / video 
 playback and controls to the UI.
 
 ```kotlin
@@ -143,7 +143,7 @@ fun release() {
 
 You can also use a different signature of `ExoPlayerFactor.newSimpleInstance(...)` factory method 
 to create your player, that accepts a few more parameters. You can also pass a 
-DefaultRenderersFactory and a DefaultLoadControl() as arguments. For example, by passing some 
+`DefaultRenderersFactory()` and a `DefaultLoadControl()` as arguments. For example, by passing some 
 arguments to the DefaultLoadControl class you can change the buffering policy of ExoPlayer2 to 
 suit your needs. 
 
