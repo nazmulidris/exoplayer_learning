@@ -69,8 +69,8 @@ You must also prepare the player, which tells it to start loading the data (and 
 have to buffer this data over the network). You also have to set a flag `playWhenReady`. 
 true means play, and false means pause playback (after enough content has been buffered).
 
-Finally, you have to attach the player to a `SimpleExoPlayerView` - displays audio / video 
-playback and controls to the UI.
+Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
+to your UI, and also provides controls for audio / video playback.
 
 ```kotlin
 class PlayerHolder(val ctx: Context,
