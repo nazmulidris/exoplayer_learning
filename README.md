@@ -99,11 +99,45 @@ fun buildMediaSource(uri: Uri): ExtractorMediaSource {
         return ExtractorMediaSource.Factory(
                 DefaultDataSourceFactory(ctx, "exoplayer-learning")).createMediaSource(uri)
     }
+
+fun selectMediaToPlay(source: Source): Uri {
+        return when (source) {
+            Source.local_audio -> Uri.parse("asset:///audio/cielo.mp3")
+            Source.local_video -> Uri.parse("asset:///video/stock_footage_video.mp4")
+            Source.http_audio -> Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3")
+            Source.http_video -> Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
+        }
+    }
+    
+data class PlayerState(var window: Int = 0,
+                       var position: Long = 0,
+                       var whenReady: Boolean = true,
+                       var source: Source = Source.local_audio)
+
+enum class Source {
+    local_audio, local_video, http_audio, http_video;
+}
 ```
 
 When you're done with playback, be sure to release the player, since it consumes a lot of resources
 (memory and system codecs, which are a globally shared resource on your phone, and there might be
 a limited number of them available on the phone).
+
+```kotlin
+fun release() {
+        with(player) {
+            // Save state
+            with(state) {
+                position = currentPosition
+                window = currentWindowIndex
+                whenReady = playWhenReady
+            }
+            // Release the player
+            release()
+        }
+        warn { "SimpleExoPlayer is released" }
+    }
+```
 
 ## Slightly more control over player creation
 
