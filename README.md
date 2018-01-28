@@ -50,7 +50,7 @@ under `assets` folders):
 
 # Notes on implementation
 
-## Quick start
+## Quick start for player creation
 
 At a minimum, in order to create a SimpleExoPlayer you will need to provide a track selector 
 (which chooses which track of audio, video, or text to load from your media source, based on 
