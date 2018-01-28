@@ -55,39 +55,53 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
     fun releasePlayer() {
         playerHolder.release()
     }
+
+    fun applyNewState(newSource: Source, newPosition: Long, newWindow: Int) {
+        releasePlayer()
+        with(state) {
+            source = newSource // tell the player to play new media
+            position = newPosition // reset the playback position
+            window = newWindow // reset the playback position
+        }
+        initPlayer()
+    }
 }
 
 class SpinnerHandler(ctx: VideoActivity,
                      spinner: Spinner,
                      state: PlayerState) : AnkoLogger {
     init {
+        // Setup the adapter
         with(ArrayAdapter<CharSequence>(ctx, android.R.layout.simple_spinner_item)) {
             Source.values().forEach { add(it.toString()) }
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = this
         }
+
+        // Attach the selection listener.
+        // Note: When the spinner launches it will fire a selection event immediately,
+        // and this method will be called right away (which is why there's a check to see if
+        // the state.source has actually changed or not, before releasing and initializing
+        // a new player.
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 val itemAsString = parent?.getItemAtPosition(pos).toString()
                 val itemAsSource = Source.valueOf(itemAsString)
                 if (itemAsSource != state.source) {
-                    state.source = itemAsSource
-                    ctx.releasePlayer()
-                    ctx.initPlayer()
+                    ctx.applyNewState(itemAsSource, 0, 0)
                     warn {
-                        "onItemSelected - state.source has changed to ${state.source}. " +
-                                "Reloading player"
+                        "onItemSelected: state.source changed to ${state.source}. Reloading player"
                     }
                 } else {
                     warn {
-                        "onItemSelected - state.source(${state.source}) hasn't changed. " +
-                                "Ignoring selection"
+                        "onItemSelected: state.source(${state.source}) hasn't changed. Ignoring selection"
                     }
                 }
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        spinner.setSelection(0)
+
     }
 }
 
