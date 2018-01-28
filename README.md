@@ -100,8 +100,8 @@ class PlayerHolder(val ctx: Context,
         return when (source) {
             Source.local_audio -> Uri.parse("asset:///audio/cielo.mp3")
             Source.local_video -> Uri.parse("asset:///video/stock_footage_video.mp4")
-            Source.http_audio -> Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3")
-            Source.http_video -> Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
+            Source.http_audio -> Uri.parse("http://storage.../play.mp3")
+            Source.http_video -> Uri.parse("http://downloa.../BigBuckBunny_320x180.mp4")
         }
     }
 
