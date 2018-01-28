@@ -73,7 +73,10 @@ Finally, you have to attach the player to a `SimpleExoPlayerView` - displays aud
 playback and controls to the UI.
 
 ```kotlin
-val player: SimpleExoPlayer =
+class PlayerHolder(val ctx: Context,
+                   val playerView: SimpleExoPlayerView,
+                   val state: PlayerState) : AnkoLogger {
+    val player: SimpleExoPlayer =
             // Create the player
             ExoPlayerFactory.newSimpleInstance(ctx, DefaultTrackSelector())
                     .apply {
@@ -85,8 +88,6 @@ val player: SimpleExoPlayer =
                         prepare(buildMediaSource(uri))
                         // Start auto playback
                         playWhenReady = true
-                        // Add logging (note, player hasn't been initialized yet, so passing this)
-                        attachLogging(this)
                         // Restore state
                         with(state) {
                             playWhenReady = whenReady
@@ -94,13 +95,8 @@ val player: SimpleExoPlayer =
                         }
                         warn { "SimpleExoPlayer created" }
                     }
-                  
-fun buildMediaSource(uri: Uri): ExtractorMediaSource {
-        return ExtractorMediaSource.Factory(
-                DefaultDataSourceFactory(ctx, "exoplayer-learning")).createMediaSource(uri)
-    }
 
-fun selectMediaToPlay(source: Source): Uri {
+    fun selectMediaToPlay(source: Source): Uri {
         return when (source) {
             Source.local_audio -> Uri.parse("asset:///audio/cielo.mp3")
             Source.local_video -> Uri.parse("asset:///video/stock_footage_video.mp4")
@@ -108,14 +104,14 @@ fun selectMediaToPlay(source: Source): Uri {
             Source.http_video -> Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
         }
     }
-    
-data class PlayerState(var window: Int = 0,
-                       var position: Long = 0,
-                       var whenReady: Boolean = true,
-                       var source: Source = Source.local_audio)
 
-enum class Source {
-    local_audio, local_video, http_audio, http_video;
+    fun buildMediaSource(uri: Uri): ExtractorMediaSource {
+        return ExtractorMediaSource.Factory(
+                DefaultDataSourceFactory(ctx, "exoplayer-learning")).createMediaSource(uri)
+    }
+
+    fun release() { ... }
+
 }
 ```
 
@@ -137,6 +133,58 @@ fun release() {
         }
         warn { "SimpleExoPlayer is released" }
     }
+```
+
+You have to integrate with the Android Activity lifecycle in order to release and create the 
+player. Here's a simple example of what this can look like.
+
+```kotlin
+class VideoActivity : AppCompatActivity(), AnkoLogger {
+
+    lateinit var playerHolder: PlayerHolder
+    val state = PlayerState()
+
+    override fun onCreate(savedInstanceState: Bundle?) { ... }
+
+    override fun onResume() {
+        super.onResume()
+        initPlayer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        releasePlayer()
+    }
+
+    fun initPlayer() {
+        playerHolder = PlayerHolder(this, exoplayerview_activity_video, state)
+        playerHolder.player.addListener(object : Player.DefaultEventListener() {
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                when (playbackState) {
+                    Player.STATE_ENDED -> {
+                        warn { "playback ended, show spinner" }
+                        exoplayerview_activity_spinner.visibility = View.VISIBLE
+                    }
+                    Player.STATE_READY -> when (playWhenReady) {
+                        true -> {
+                            exoplayerview_activity_spinner.visibility = View.GONE
+                            warn { "playback started, hide spinner" }
+                        }
+                        false -> {
+                            exoplayerview_activity_spinner.visibility = View.VISIBLE
+                            warn { "playback paused, show spinner" }
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    fun releasePlayer() {
+        playerHolder.release()
+    }
+
+}
 ```
 
 ## Slightly more control over player creation
