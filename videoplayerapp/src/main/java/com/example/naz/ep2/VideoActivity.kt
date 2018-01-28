@@ -16,6 +16,7 @@
 
 package com.example.naz.ep2
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -24,8 +25,8 @@ import com.google.android.exoplayer2.audio.AudioRendererEventListener
 import com.google.android.exoplayer2.decoder.DecoderCounters
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_video.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -33,7 +34,8 @@ import org.jetbrains.anko.info
 
 class VideoActivity : AppCompatActivity(), AnkoLogger {
 
-    lateinit var exoPlayer: SimpleExoPlayer
+    lateinit var playerHolder: PlayerHolder
+    val state = PlayerState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,35 +44,76 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-        initPlayer()
+        playerHolder = PlayerHolder(this, exoplayerview_activity_video, state)
     }
 
     override fun onPause() {
         super.onPause()
-        releasePlayer()
+        playerHolder.release()
+    }
+}
+
+enum class Source {
+    local_audio, local_video, http_audio, http_video
+}
+
+data class PlayerState(var window: Int = 0,
+                       var position: Long = 0,
+                       var whenReady: Boolean = true,
+                       var source: Source = Source.local_video)
+
+class PlayerHolder(val ctx: Context,
+                   val playerView: SimpleExoPlayerView,
+                   val state: PlayerState) : AnkoLogger {
+    val player: SimpleExoPlayer =
+            // Create the player
+            ExoPlayerFactory.newSimpleInstance(ctx, DefaultTrackSelector())
+                    .apply {
+                        // Bind to the view
+                        playerView.player = this
+                        // Pick the media to play
+                        val uri = selectMediaToPlay(state.source)
+                        // Load media
+                        prepare(buildMediaSource(uri))
+                        // Start auto playback
+                        playWhenReady = true
+                        // Add logging (note, player hasn't been initialized yet, so passing this)
+                        attachLogging(this)
+                        // Restore state
+                        with(state) {
+                            playWhenReady = whenReady
+                            seekTo(window, position)
+                        }
+                    }
+
+    fun selectMediaToPlay(source: Source): Uri {
+        return when (source) {
+            Source.local_audio -> Uri.parse("asset:///audio/cielo.mp4")
+            Source.local_video -> Uri.parse("asset:///video/stock_footage_video.mp4")
+            Source.http_audio -> Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3")
+            Source.http_video -> Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
+        }
     }
 
-    fun initPlayer() {
-        // Create the player
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
+    fun buildMediaSource(uri: Uri): ExtractorMediaSource {
+        return ExtractorMediaSource.Factory(
+                DefaultDataSourceFactory(ctx, "exoplayer-learning")).createMediaSource(uri)
+    }
 
-        // Bind to the view
-        exoplayerview_activity_video.player = exoPlayer
+    fun release() {
+        with(player) {
+            // Save state
+            with(state) {
+                position = currentPosition
+                window = currentWindowIndex
+                whenReady = playWhenReady
+            }
+            // Release the player
+            release()
+        }
+    }
 
-        // Pick the media to play
-        val userAgent = Util.getUserAgent(this, this.javaClass.simpleName)
-
-        val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")
-        //val uri = Uri.parse("asset:///video/stock_footage_video.mp4")
-
-        val mediaSource = ExtractorMediaSource
-                .Factory(DefaultDataSourceFactory(this, userAgent))
-                .createMediaSource(uri)
-
-        // Tell the player to play the media
-        exoPlayer.prepare(mediaSource)
-        exoPlayer.playWhenReady = true
-
+    fun attachLogging(exoPlayer: SimpleExoPlayer) {
         // Attach logging
         exoPlayer.addListener(object : Player.DefaultEventListener() {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -92,7 +135,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
             }
         })
 
-        exoPlayer.addAudioDebugListener(object: AudioRendererEventListener {
+        exoPlayer.addAudioDebugListener(object : AudioRendererEventListener {
             override fun onAudioSinkUnderrun(bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) {
             }
 
@@ -113,11 +156,8 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
             }
         })
 
-        exoPlayer.addMetadataOutput{
-            info{ "metaDataOutput: $it" }
+        exoPlayer.addMetadataOutput {
+            info { "metaDataOutput: $it" }
         }
     }
-
-    fun releasePlayer() = exoPlayer.release()
-
 }
