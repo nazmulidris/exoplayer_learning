@@ -47,3 +47,99 @@ under `assets` folders):
 
 ## PIP, AR
 - [x] [PIP, AR](https://goo.gl/1GoECE)
+
+# Notes on implementation
+
+## Quick start
+
+At a minimum, in order to create a SimpleExoPlayer you will need to provide a track selector 
+(which chooses which track of audio, video, or text to load from your media source, based on 
+bandwidth, devices, capabilities, language, etc). 
+
+You will need to create a MediaSource, which tells player where to load media from. 
+Sources of media can be the asset folder in your APK, or over HTTP, for regular media 
+files (mp3, mp4, webm, mkv, etc). You cna use the ExtractorMediaSource to handle these 
+sources and formats. For adaptive formats, you can use DashMediaSource (for DASH sources), 
+SsMediaSource (for SmoothStreaming sources), and HlsMediaSource (for HLS sources).
+
+You have to provide a URI that points to your media content, which is used by the 
+MediaSource to actually load and prepare the content for playback.
+
+You must also prepare the player, which tells it to start loading the data (and it might
+have to buffer this data over the network). You also have to set a flag "playWhenReady". 
+true means play, and false means pause playback (after enough content has been buffered).
+
+Finally, you have to attach the player to a SimpleExoPlayerView - displays audio / video 
+playback and controls to the UI.
+
+```kotlin
+val player: SimpleExoPlayer =
+            // Create the player
+            ExoPlayerFactory.newSimpleInstance(ctx, DefaultTrackSelector())
+                    .apply {
+                        // Bind to the view
+                        playerView.player = this
+                        // Pick the media to play
+                        val uri = selectMediaToPlay(state.source)
+                        // Load media
+                        prepare(buildMediaSource(uri))
+                        // Start auto playback
+                        playWhenReady = true
+                        // Add logging (note, player hasn't been initialized yet, so passing this)
+                        attachLogging(this)
+                        // Restore state
+                        with(state) {
+                            playWhenReady = whenReady
+                            seekTo(window, position)
+                        }
+                        warn { "SimpleExoPlayer created" }
+                    }
+                  
+fun buildMediaSource(uri: Uri): ExtractorMediaSource {
+        return ExtractorMediaSource.Factory(
+                DefaultDataSourceFactory(ctx, "exoplayer-learning")).createMediaSource(uri)
+    }
+```
+
+When you're done with playback, be sure to release the player, since it consumes a lot of resources
+(memory and system codecs, which are a globally shared resource on your phone, and there might be
+a limited number of them available on the phone).
+
+## Slightly more control over player creation
+
+You can also use a different signature of `ExoPlayerFactor.newSimpleInstance(...)` factory method 
+to create your player, that accepts a few more parameters. You can also pass a 
+DefaultRenderersFactory and a DefaultLoadControl() as arguments. For example, by passing some 
+arguments to the DefaultLoadControl class you can change the buffering policy of ExoPlayer2 to 
+suit your needs. 
+
+```kotlin
+val player: SimpleExoPlayer =
+            // Create player
+            ExoPlayerFactory.newSimpleInstance(
+                    // Renders audio, video, text (subtitles) content
+                    DefaultRenderersFactory(ctx),
+                    // Choose best audio, video, text track from available sources, based on bandwidth
+                    // device capabilities, language, etc
+                    DefaultTrackSelector(),
+                    // Manage buffering and loading data over the network
+                    DefaultLoadControl()
+            ).apply {
+                // Attach UI
+                playerView.player = this
+
+                // Init player state
+                playWhenReady = state.playWhenReady
+                seekTo(state.currentWindow, state.playbackPosition)
+
+                // Load media
+                val uri =
+                        //Uri.parse(getString(R.string.media_url_mp3)) // audio
+                        Uri.parse(ctx.getString(R.string.media_url_mp4)) // video
+                prepare(buildMediaSource(uri))
+            }
+```
+
+For more complex use cases, you can provide your own implementations of all the arguments that are
+passed to the `ExoPlayerFactory.newSimpleInstance(...)` factory method, which gives you a great
+deal of flexibility in what you can do with ExoPlayer2.
