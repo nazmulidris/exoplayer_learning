@@ -158,26 +158,6 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
 
     fun initPlayer() {
         playerHolder = PlayerHolder(this, exoplayerview_activity_video, state)
-        playerHolder.player.addListener(object : Player.DefaultEventListener() {
-            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                when (playbackState) {
-                    Player.STATE_ENDED -> {
-                        warn { "playback ended, show spinner" }
-                        exoplayerview_activity_spinner.visibility = View.VISIBLE
-                    }
-                    Player.STATE_READY -> when (playWhenReady) {
-                        true -> {
-                            exoplayerview_activity_spinner.visibility = View.GONE
-                            warn { "playback started, hide spinner" }
-                        }
-                        false -> {
-                            exoplayerview_activity_spinner.visibility = View.VISIBLE
-                            warn { "playback paused, show spinner" }
-                        }
-                    }
-                }
-            }
-        })
     }
 
     fun releasePlayer() {
