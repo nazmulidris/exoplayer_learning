@@ -2,52 +2,6 @@
 
 This project is an exploration of ExoPlayer2 for audio and video playback.
 
-## Loading files locally from APK
-[DefaultDataSource](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html) 
-allows local files to be loaded via the following URIs:
-- `file:///`
-- `asset:///`
-- `content:///`
-- `rtmp`
-- `data`
-- `http(s)`
-
-Note that loading files from `Uri.parse("android.resource://${packageName}/${R.raw.id})"` 
-is not allowed. Also note that you can't add folders in the `res` folder.
-
-Note that you can load files from `assets` in the following ways (you can have nested 
-under `assets` folders):
-- `val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
-- `val uri = Uri.parse("asset:///video/stock_footage_video.mp4")`
-
-## Audio, Video Playback
-- [ ] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
-- [ ] [IO17 ExoPlayer2 Session Video](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
-- [ ] [Caster.io course on ExoPlayer2](https://goo.gl/EeuZi1)
-- [ ] [ExoPlayer2 for audio, video playback sample](https://goo.gl/1d4bkY)
-- [ ] [ExoPlayer2 play audio + video](https://goo.gl/eVbEoD)
-- [x] [ExoPlayer2 Overview](https://goo.gl/ZynVzk)
-- [x] [Why ExoPlayer2? from Google](https://goo.gl/tny1Rz)
-
-## MediaSession 
-- [ ] [MediaSession extension for ExoPlayer2](https://medium.com/google-exoplayer/the-mediasession-extension-for-exoplayer-82b9619deb2d)
-
-## Codelabs
-- [ ] [IO17 ExoPlayer2 codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#0)
-
-## Tutorials
-- [ ] [Using ExoPlayer and Kotlin to build simple audio app](https://medium.com/mindorks/implementing-exoplayer-for-beginners-in-kotlin-c534706bce4b)
-
-## Changelog for ExoPlayer2
-- [ ] [Latest changes for 2.6.1](https://medium.com/google-exoplayer/exoplayer-2-6-1-whats-new-a9e54bffffc5)
-
-## DASH, HLS
-- [x] [Dash, HLS](https://goo.gl/r9fXXf)
-- [x] [Dash benefits over HLS, etc](https://goo.gl/SNvMgQ)
-
-## PIP, AR
-- [x] [PIP, AR](https://goo.gl/1GoECE)
-
 # Notes on implementation
 
 ## Quick start for player creation
@@ -205,3 +159,51 @@ val player: SimpleExoPlayer =
 For more complex use cases, you can provide your own implementations of all the arguments that are
 passed to the `ExoPlayerFactory.newSimpleInstance(...)` factory method, which gives you a great
 deal of flexibility in what you can do with ExoPlayer2.
+
+## Loading files locally from APK
+[DefaultDataSource](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html) 
+allows local files to be loaded via the following URIs:
+- `file:///`
+- `asset:///`
+- `content:///`
+- `rtmp`
+- `data`
+- `http(s)`
+
+Note that loading files from `Uri.parse("android.resource://${packageName}/${R.raw.id})"` 
+is not allowed. Also note that you can't add folders in the `res` folder.
+
+Note that you can load files from `assets` in the following ways (you can have nested 
+under `assets` folders):
+- `val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
+- `val uri = Uri.parse("asset:///video/stock_footage_video.mp4")`
+
+# Resources
+
+## Audio, Video Playback
+- [ ] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
+- [ ] [IO17 ExoPlayer2 Session Video](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
+- [ ] [Caster.io course on ExoPlayer2](https://goo.gl/EeuZi1)
+- [ ] [ExoPlayer2 for audio, video playback sample](https://goo.gl/1d4bkY)
+- [ ] [ExoPlayer2 play audio + video](https://goo.gl/eVbEoD)
+- [x] [ExoPlayer2 Overview](https://goo.gl/ZynVzk)
+- [x] [Why ExoPlayer2? from Google](https://goo.gl/tny1Rz)
+
+## MediaSession 
+- [ ] [MediaSession extension for ExoPlayer2](https://medium.com/google-exoplayer/the-mediasession-extension-for-exoplayer-82b9619deb2d)
+
+## Codelabs
+- [ ] [IO17 ExoPlayer2 codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#0)
+
+## Tutorials
+- [ ] [Using ExoPlayer and Kotlin to build simple audio app](https://medium.com/mindorks/implementing-exoplayer-for-beginners-in-kotlin-c534706bce4b)
+
+## Changelog for ExoPlayer2
+- [ ] [Latest changes for 2.6.1](https://medium.com/google-exoplayer/exoplayer-2-6-1-whats-new-a9e54bffffc5)
+
+## DASH, HLS
+- [x] [Dash, HLS](https://goo.gl/r9fXXf)
+- [x] [Dash benefits over HLS, etc](https://goo.gl/SNvMgQ)
+
+## PIP, AR
+- [x] [PIP, AR](https://goo.gl/1GoECE)
