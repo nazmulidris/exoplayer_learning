@@ -68,15 +68,14 @@ class PlayerHolder : AnkoLogger {
                     playerView.player = this
                     // Load media
                     prepare(buildMediaSource(state.source))
-                    // Start playback when media has buffered enough
-                    playWhenReady = true
-                    // Add logging (note, player hasn't been initialized yet, so passing this)
-                    attachLogging(this)
                     // Restore state
                     with(state) {
+                        // Start playback when media has buffered enough (whenReady is true by default)
                         playWhenReady = whenReady
                         seekTo(window, position)
                     }
+                    // Add logging (note, player hasn't been initialized yet, so passing this)
+                    attachLogging(this)
                     warn { "SimpleExoPlayer created" }
                 }
     }
@@ -92,7 +91,8 @@ class PlayerHolder : AnkoLogger {
                 )
             }
             else -> {
-                return createExtractorMediaSource(source)            }
+                return createExtractorMediaSource(source)
+            }
         }
     }
 

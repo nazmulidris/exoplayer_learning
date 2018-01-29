@@ -52,17 +52,16 @@ class PlayerHolder : AnkoLogger {
                 .apply {
                     // Bind to the view
                     playerView.player = this
-                    // Pick the media to play
-                    val uri = selectMediaToPlay(state.source)
                     // Load media
-                    prepare(buildMediaSource(uri))
-                    // Start playback when media has buffered enough
-                    playWhenReady = true
+                    prepare(buildMediaSource(state.source))
                     // Restore state
                     with(state) {
+                        // Start playback when media has buffered enough (whenReady is true by default)
                         playWhenReady = whenReady
                         seekTo(window, position)
                     }
+                    // Add logging (note, player hasn't been initialized yet, so passing this)
+                    attachLogging(this)
                     info { "SimpleExoPlayer created" }
                 }    
     }
@@ -147,30 +146,17 @@ arguments to the DefaultLoadControl class you can change the buffering policy of
 suit your needs. 
 
 ```kotlin
-val player: SimpleExoPlayer =
-            // Create player
-            ExoPlayerFactory.newSimpleInstance(
-                    // Renders audio, video, text (subtitles) content
-                    DefaultRenderersFactory(ctx),
-                    // Choose best audio, video, text track from available sources, based on bandwidth
-                    // device capabilities, language, etc
-                    DefaultTrackSelector(),
-                    // Manage buffering and loading data over the network
-                    DefaultLoadControl()
-            ).apply {
-                // Attach UI
-                playerView.player = this
-
-                // Init player state
-                playWhenReady = state.playWhenReady
-                seekTo(state.currentWindow, state.playbackPosition)
-
-                // Load media
-                val uri =
-                        //Uri.parse(getString(R.string.media_url_mp3)) // audio
-                        Uri.parse(ctx.getString(R.string.media_url_mp4)) // video
-                prepare(buildMediaSource(uri))
-            }
+    // Create player
+    player =
+        ExoPlayerFactory.newSimpleInstance(
+                // Renders audio, video, text (subtitles) content
+                DefaultRenderersFactory(ctx),
+                // Choose best audio, video, text track from available sources, 
+                // based on bandwidth, device capabilities, language, etc
+                DefaultTrackSelector(),
+                // Manage buffering and loading data over the network
+                DefaultLoadControl()
+        ).apply { ... }
 ```
 
 For more complex use cases, you can provide your own implementations of all the arguments that are
