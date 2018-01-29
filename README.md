@@ -207,7 +207,8 @@ fun buildMediaSource(source: Source): MediaSource {
 
 `ConcatenatingMediaSource` creates a static playlist. If you want a dynamic playlist then you
 can use `DynamicContactenatingMediaSource`. Both of them will combine media sources seamlessly
-and handle buffering for the entire playlist.
+and handle buffering for the entire playlist. Here is a [medium article](https://medium.com/google-exoplayer/exoplayer-2-x-mediasource-composition-6c285fcbca1f) 
+on the details of MediaSource composition.
 
 ## Loading files locally from APK
 [DefaultDataSource](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html) 
