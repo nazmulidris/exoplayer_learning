@@ -232,13 +232,15 @@ allows local files to be loaded via the following URIs:
 - `data`
 - `http(s)`
 
-Note that loading files from `Uri.parse("android.resource://${packageName}/${R.raw.id})"` 
-is not allowed. Also note that you can't add folders in the `res` folder.
-
-Note that you can load files from `assets` in the following ways (you can have nested 
+You can load files from `assets` in the following ways (you can have nested 
 under `assets` folders):
 - `val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
 - `val uri = Uri.parse("asset:///video/stock_footage_video.mp4")`
+
+Note that ExoPlayer doesn't allow loading files from 
+`Uri.parse("android.resource://${packageName}/${R.raw.id})"`. 
+Also, Android doesn't allow you to add folders in the `res` folder, which is allowed in 
+the `assets` folder.
 
 # Resources
 
