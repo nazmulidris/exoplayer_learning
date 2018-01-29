@@ -218,8 +218,8 @@ be restored, so that the user can resume playback where they left off (position 
 playback if any, and the item in the playlist that they were consuming, which is a window
 index).
 
-Before the player is released, the player's current window, position, playWhenReady, and 
-playlist or media item information is saved to the `PlayerState` object, and it's restored once 
+Before the player is released, the player's `currentWindowIndex`, `currentPosition`, `playWhenReady`, 
+and playlist or media item information is saved to the `PlayerState` object, and it's restored once 
 the player is created again.
 
 ## Loading files locally from APK
