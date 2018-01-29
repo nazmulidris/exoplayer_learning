@@ -147,16 +147,16 @@ arguments to the DefaultLoadControl class you can change the buffering policy of
 suit your needs. 
 
 ```kotlin
-    // Create player
-    player = ExoPlayerFactory.newSimpleInstance(
-        // Renders audio, video, text (subtitles) content
-        DefaultRenderersFactory(ctx),
-        // Choose best audio, video, text track from available sources, 
-        // based on bandwidth, device capabilities, language, etc
-        DefaultTrackSelector(),
-        // Manage buffering and loading data over the network
-        DefaultLoadControl()
-    ).apply { ... }
+// Create player
+player = ExoPlayerFactory.newSimpleInstance(
+    // Renders audio, video, text (subtitles) content
+    DefaultRenderersFactory(ctx),
+    // Choose best audio, video, text track from available sources, 
+    // based on bandwidth, device capabilities, language, etc
+    DefaultTrackSelector(),
+    // Manage buffering and loading data over the network
+    DefaultLoadControl()
+).apply { ... }
 ```
 
 For more complex use cases, you can provide your own implementations of all the arguments that are
