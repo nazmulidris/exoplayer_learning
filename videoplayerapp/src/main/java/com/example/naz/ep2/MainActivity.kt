@@ -18,6 +18,9 @@ package com.example.naz.ep2
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.example.naz.ep2.music1.AudioActivityNoUI
+import com.example.naz.ep2.music2.AudioActivity
+import com.example.naz.ep2.video.VideoActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.sdk25.coroutines.onClick

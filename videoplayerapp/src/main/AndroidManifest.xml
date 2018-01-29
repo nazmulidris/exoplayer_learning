@@ -32,9 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".VideoActivity" />
-        <activity android:name=".AudioActivityNoUI" />
-        <activity android:name=".AudioActivity"></activity>
+        <activity android:name=".video.VideoActivity" />
+        <activity android:name=".music1.AudioActivityNoUI" />
+        <activity android:name=".music2.AudioActivity"></activity>
     </application>
 
 </manifest>

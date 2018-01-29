@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.naz.ep2
+package com.example.naz.ep2.video
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import com.example.naz.ep2.R
 import com.google.android.exoplayer2.Player
 import kotlinx.android.synthetic.main.activity_video.*
 import org.jetbrains.anko.AnkoLogger
@@ -51,7 +52,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
 
     fun initPlayer() {
         playerHolder = PlayerHolder(this, exoplayerview_activity_video, state)
-        playerHolder.player.addListener(object : Player.DefaultEventListener() {
+        playerHolder.mPlayer.addListener(object : Player.DefaultEventListener() {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_ENDED -> {

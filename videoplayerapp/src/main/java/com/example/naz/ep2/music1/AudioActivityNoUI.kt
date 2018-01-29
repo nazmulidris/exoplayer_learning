@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.naz.ep2
+package com.example.naz.ep2.music1
 
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.example.naz.ep2.R
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ExtractorMediaSource

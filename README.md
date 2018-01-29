@@ -27,6 +27,15 @@ Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders
 to your UI, and also provides controls for audio / video playback.
 
 ```kotlin
+enum class Source {
+    local_audio, local_video, http_audio, http_video, playlist;
+}
+
+data class PlayerState(var window: Int = 0,
+                       var position: Long = 0,
+                       var whenReady: Boolean = true,
+                       var source: Source = local_audio)
+                       
 class PlayerHolder(val ctx: Context,
                    val playerView: SimpleExoPlayerView,
                    val state: PlayerState) : AnkoLogger {
@@ -159,6 +168,46 @@ val player: SimpleExoPlayer =
 For more complex use cases, you can provide your own implementations of all the arguments that are
 passed to the `ExoPlayerFactory.newSimpleInstance(...)` factory method, which gives you a great
 deal of flexibility in what you can do with ExoPlayer2.
+
+## Creating playlists
+
+Instead of providing the player with a single `ExtractorMediaSource` (as shown in the 
+`buildMediaSource(Uri)` method above), you can simply create a `ConcatenatingMediaSource` 
+which can have any number of `MediaSource` objects contained in it. Here's an example.
+
+```kotlin
+val mMediaMap = mapOf<Source, Uri>(
+        local_audio to Uri.parse("asset:///audio/cielo.mp3"),
+        local_video to Uri.parse("asset:///video/stock_footage_video.mp4"),
+        http_audio to Uri.parse("http://storag...play.mp3"),
+        http_video to Uri.parse("http://downlo...BigBuckBunny_320x180.mp4")
+    )
+
+fun buildMediaSource(source: Source): MediaSource {
+        return when (source) {
+            playlist -> {
+                return ConcatenatingMediaSource(
+                        createExtractorMediaSource(local_audio),
+                        createExtractorMediaSource(local_video),
+                        createExtractorMediaSource(http_audio),
+                        createExtractorMediaSource(http_video)
+                )
+            }
+            else -> {
+                return createExtractorMediaSource(source)            }
+        }
+    }
+
+    private fun createExtractorMediaSource(source: Source): MediaSource {
+        return ExtractorMediaSource.Factory(
+                DefaultDataSourceFactory(mContext, "exoplayer-learning"))
+                .createMediaSource(mMediaMap.get(source))
+    }
+```
+
+`ConcatenatingMediaSource` creates a static playlist. If you want a dynamic playlist then you
+can use `DynamicContactenatingMediaSource`. Both of them will combine media sources seamlessly
+and handle buffering for the entire playlist.
 
 ## Loading files locally from APK
 [DefaultDataSource](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html) 
