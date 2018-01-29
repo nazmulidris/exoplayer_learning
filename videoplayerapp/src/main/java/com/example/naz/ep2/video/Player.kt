@@ -90,9 +90,7 @@ class PlayerHolder : AnkoLogger {
                         createExtractorMediaSource(http_video)
                 )
             }
-            else -> {
-                return createExtractorMediaSource(source)
-            }
+            else -> { return createExtractorMediaSource(source) }
         }
     }
 

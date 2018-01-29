@@ -187,8 +187,7 @@ fun buildMediaSource(source: Source): MediaSource {
                         createExtractorMediaSource(http_video)
                 )
             }
-            else -> {
-                return createExtractorMediaSource(source)            }
+            else -> { return createExtractorMediaSource(source) }
         }
     }
 
@@ -203,6 +202,23 @@ fun buildMediaSource(source: Source): MediaSource {
 can use `DynamicContactenatingMediaSource`. Both of them will combine media sources seamlessly
 and handle buffering for the entire playlist. Here is a [medium article](https://medium.com/google-exoplayer/exoplayer-2-x-mediasource-composition-6c285fcbca1f) 
 on the details of MediaSource composition.
+
+## Saving player state between onPause() and onResume()
+
+The `PlayerState` data class is used to load the player's state information before it's been run 
+the first time. When the player is released, some of the player's state is saved to this object.
+When a new player is created, this simple state object is used to restore a boolean, Int, and Long
+value that are used by the player to set itself back up (where you'd left off). 
+
+From a UX standpoint, this means that when you run the app, play some media, and hit 
+the home button, the player is actually released (destroyed). When you switch back 
+to that app, the player is initialized again, and the previous state information should
+be restored, so that the user can resume playback where they left off (position of previous
+playback if any, and the item in the playlist that they were consuming, which is a window
+index).
+
+Before the player is released, the player's current window, position, and playWhenReady information
+is saved to the `PlayerState` object, and it's restored once the player is created again.
 
 ## Loading files locally from APK
 [DefaultDataSource](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html) 
