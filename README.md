@@ -87,7 +87,7 @@ class PlayerHolder : AnkoLogger {
 
 When you're done with playback, be sure to release the player, since it consumes resources 
 like network, memory and system codecs. Codecs are a globally shared resource on the 
-phone, and there might bea limited number of them available depending on the specific 
+phone, and there might be a limited number of them available depending on the specific 
 phone and OS version, so it's important to release them when not using them.
 
 ```kotlin
