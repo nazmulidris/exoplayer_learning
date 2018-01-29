@@ -206,10 +206,10 @@ on the details of MediaSource composition.
 ## Saving player state between onPause() and onResume()
 
 The `PlayerState` data class is used to load the player's state information before it's been run 
-the first time. When the player is released, some of the player's state is saved to this object.
-When a new player is created, this simple state object is used to restore a `boolean`, `Int`, 
-`Long`, and an eunm value (`Source`) which are used by the player to set itself back up 
-(where you'd left off). 
+the first time. When the player is released, some of the player's state is saved to an object of 
+this class. When a new player is created, this simple state object is used to restore a 
+`boolean`, `Int`, `Long`, and an enum value (`Source`) which are used by the player to set itself 
+back up (where the previous player instance had left off). 
 
 From a UX standpoint, this means that when you run the app, play some media, and hit 
 the home button, the player is actually released (destroyed). When you switch back 
