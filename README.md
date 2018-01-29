@@ -234,8 +234,8 @@ allows local files to be loaded via the following URIs:
 
 You can load files from `assets` in the following ways (you can create nested folders 
 under the `assets` folder):
-- `val uri = Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
-- `val uri = Uri.parse("asset:///video/stock_footage_video.mp4")`
+- `Uri.parse("file:///android_asset/video/stock_footage_video.mp4")`
+- `Uri.parse("asset:///video/stock_footage_video.mp4")`
 
 Note that ExoPlayer doesn't allow loading files from the `res` folder using 
 `Uri.parse("android.resource://${packageName}/${R.raw.id})"`. 
