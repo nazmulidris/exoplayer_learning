@@ -36,28 +36,36 @@ data class PlayerState(var window: Int = 0,
                        var whenReady: Boolean = true,
                        var source: Source = local_audio)
                        
-class PlayerHolder(val ctx: Context,
-                   val playerView: SimpleExoPlayerView,
-                   val state: PlayerState) : AnkoLogger {
-    val player: SimpleExoPlayer =
-            // Create the player
-            ExoPlayerFactory.newSimpleInstance(ctx, DefaultTrackSelector())
-                    .apply {
-                        // Bind to the view
-                        playerView.player = this
-                        // Pick the media to play
-                        val uri = selectMediaToPlay(state.source)
-                        // Load media
-                        prepare(buildMediaSource(uri))
-                        // Start auto playback
-                        playWhenReady = true
-                        // Restore state
-                        with(state) {
-                            playWhenReady = whenReady
-                            seekTo(window, position)
-                        }
-                        warn { "SimpleExoPlayer created" }
+class PlayerHolder : AnkoLogger {
+    val ctx: Context
+    val playerView: SimpleExoPlayerView
+    val state: PlayerState
+    val player: SimpleExoPlayer
+                   
+    constructor(c: Context, pv: PlayerView, s: PlayerState){
+        ctx = c
+        playerView = pv
+        state = s
+
+        // Create the player
+        player = ExoPlayerFactory.newSimpleInstance(ctx, DefaultTrackSelector())
+                .apply {
+                    // Bind to the view
+                    playerView.player = this
+                    // Pick the media to play
+                    val uri = selectMediaToPlay(state.source)
+                    // Load media
+                    prepare(buildMediaSource(uri))
+                    // Start playback when media has buffered enough
+                    playWhenReady = true
+                    // Restore state
+                    with(state) {
+                        playWhenReady = whenReady
+                        seekTo(window, position)
                     }
+                    info { "SimpleExoPlayer created" }
+                }    
+    }
 
     fun selectMediaToPlay(source: Source): Uri {
         return when (source) {
@@ -94,7 +102,7 @@ fun release() {
             // Release the player
             release()
         }
-        warn { "SimpleExoPlayer is released" }
+        info { "SimpleExoPlayer is released" }
     }
 ```
 

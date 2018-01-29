@@ -68,7 +68,7 @@ class PlayerHolder : AnkoLogger {
                     playerView.player = this
                     // Load media
                     prepare(buildMediaSource(state.source))
-                    // Start auto playback
+                    // Start playback when media has buffered enough
                     playWhenReady = true
                     // Add logging (note, player hasn't been initialized yet, so passing this)
                     attachLogging(this)
