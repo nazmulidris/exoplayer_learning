@@ -241,7 +241,7 @@ Note that ExoPlayer doesn't allow loading files from the `res` folder using
 `Uri.parse("android.resource://${packageName}/${R.raw.id})"`. 
 Also, Android doesn't allow you to add folders in the `res` folder (unlike `assets`).
 
-# Resources
+# Resources to learn more about ExoPlayer2
 
 ## Audio, Video Playback
 - [ ] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
