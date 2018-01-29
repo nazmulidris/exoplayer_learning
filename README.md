@@ -85,9 +85,9 @@ class PlayerHolder : AnkoLogger {
 }
 ```
 
-When you're done with playback, be sure to release the player, since it consumes a lot of resources
-(memory and system codecs, which are a globally shared resource on your phone, and there might be
-a limited number of them available on the phone).
+When you're done with playback, be sure to release the player, since it consumes resources
+- memory and system codecs, which are a globally shared resource on the phone, and there might be
+a limited number of them available depending on the specific phone and OS version.
 
 ```kotlin
 fun release() {
