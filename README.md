@@ -143,7 +143,8 @@ If you would like to re-use your `ExoPlayer` then make sure to call:
 2. `seekTo(0, 0)`
 
 This will release all the resources (codecs, MediaSources, etc) held by the player. In order to
-use the player again, call `prepare(MediaSource)` as show in the gists above.
+use the player again, call `prepare(MediaSource)` and set `playWhenReady` as show in the gists 
+above.
 
 ## Slightly more control over player creation
 
