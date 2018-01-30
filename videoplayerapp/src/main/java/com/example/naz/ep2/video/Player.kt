@@ -18,6 +18,7 @@ package com.example.naz.ep2.video
 
 import android.content.Context
 import android.net.Uri
+import android.view.Surface
 import com.example.naz.ep2.video.Source.*
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioRendererEventListener
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.video.VideoRendererEventListener
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.warn
 
@@ -115,6 +117,9 @@ class PlayerHolder : AnkoLogger {
         warn { "SimpleExoPlayer is released" }
     }
 
+    /**
+     * More info in this [codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#5)
+     */
     fun attachLogging(exoPlayer: SimpleExoPlayer) {
         // Attach logging
         exoPlayer.addListener(object : Player.DefaultEventListener() {
@@ -155,6 +160,30 @@ class PlayerHolder : AnkoLogger {
             }
 
             override fun onAudioDisabled(counters: DecoderCounters?) {
+            }
+        })
+
+        exoPlayer.addVideoDebugListener(object: VideoRendererEventListener {
+            override fun onDroppedFrames(count: Int, elapsedMs: Long) {
+            }
+
+            override fun onVideoEnabled(counters: DecoderCounters?) {
+            }
+
+            override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
+            }
+
+            override fun onVideoDisabled(counters: DecoderCounters?) {
+            }
+
+            override fun onVideoDecoderInitialized(decoderName: String?, initializedTimestampMs: Long, initializationDurationMs: Long) {
+            }
+
+            override fun onVideoInputFormatChanged(format: Format?) {
+            }
+
+            override fun onRenderedFirstFrame(surface: Surface?) {
+                warn { "onRenderedFirstFrame: can calculate latency for video playback from this" }
             }
         })
 

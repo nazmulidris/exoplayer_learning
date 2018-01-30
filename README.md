@@ -230,6 +230,12 @@ Before the player is released, the player's `currentWindowIndex`, `currentPositi
 and playlist or media item information is saved to the `PlayerState` object, and it's restored once 
 the player is created again.
 
+## Adaptive streaming
+More info in this [codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#4)
+
+## Listening to player events for UX and Quality of Experience
+More info in this [codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#5)
+
 ## Loading files locally from APK
 [`DefaultDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html)
 allows local files to be loaded via the following URIs:
