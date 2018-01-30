@@ -138,6 +138,13 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
 }
 ```
 
+If you would like to re-use your `ExoPlayer` then make sure to call: 
+1. `stop()`
+2. `seekTo(0, 0)`
+
+This will release all the resources (codecs, MediaSources, etc) held by the player. In order to
+use the player again, call `prepare(MediaSource)` as show in the gists above.
+
 ## Slightly more control over player creation
 
 You can also use a different signature of `ExoPlayerFactor.newSimpleInstance(...)` factory method 
@@ -243,6 +250,9 @@ Also, Android doesn't allow you to add folders in the `res` folder (unlike `asse
 
 # Resources to learn more about ExoPlayer2
 
+## Codelabs
+- [ ] [IO17 ExoPlayer2 codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#0)
+
 ## Audio, Video Playback
 - [ ] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
 - [ ] [IO17 ExoPlayer2 Session Video](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
@@ -254,9 +264,6 @@ Also, Android doesn't allow you to add folders in the `res` folder (unlike `asse
 
 ## MediaSession 
 - [ ] [MediaSession extension for ExoPlayer2](https://medium.com/google-exoplayer/the-mediasession-extension-for-exoplayer-82b9619deb2d)
-
-## Codelabs
-- [ ] [IO17 ExoPlayer2 codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#0)
 
 ## Tutorials
 - [ ] [Using ExoPlayer and Kotlin to build simple audio app](https://medium.com/mindorks/implementing-exoplayer-for-beginners-in-kotlin-c534706bce4b)
