@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Nazmul Idris. All rights reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +36,6 @@
         app:fastforward_increment="10000"
         app:rewind_increment="10000"
         app:controller_layout_id="@layout/custom_playback_control"
-        android:keepScreenOn="true"/>
+        android:keepScreenOn="true" />
 
 </LinearLayout>
-

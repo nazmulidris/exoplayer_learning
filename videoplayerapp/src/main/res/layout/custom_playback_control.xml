@@ -19,7 +19,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
-    android:background="#CC000000"
+    android:background="@android:drawable/screen_background_dark_transparent"
     android:orientation="vertical">
 
     <LinearLayout
@@ -48,11 +48,11 @@
             style="@style/ExoMediaButton"/>
 
         <ImageButton android:id="@id/exo_play"
-            android:tint="#20aaff"
+            android:tint="#1ec823"
             style="@style/ExoMediaButton.Play"/>
 
         <ImageButton android:id="@id/exo_pause"
-            android:tint="#6f00ff"
+            android:tint="#c7205a"
             style="@style/ExoMediaButton.Pause"/>
 
 
@@ -97,7 +97,8 @@
 
     <ImageView
         android:src="@drawable/google_logo"
-        android:layout_width="match_parent"
+        android:scaleType="fitStart"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>

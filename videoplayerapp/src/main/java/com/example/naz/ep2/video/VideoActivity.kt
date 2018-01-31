@@ -61,7 +61,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
                     }
                     Player.STATE_READY -> when (playWhenReady) {
                         true -> {
-                            exoplayerview_activity_spinner.visibility = View.GONE
+                            exoplayerview_activity_spinner.visibility = View.INVISIBLE
                             warn { "playback started, hide spinner" }
                         }
                         false -> {
