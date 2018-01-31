@@ -48,9 +48,11 @@
             style="@style/ExoMediaButton"/>
 
         <ImageButton android:id="@id/exo_play"
+            android:tint="#20aaff"
             style="@style/ExoMediaButton.Play"/>
 
         <ImageButton android:id="@id/exo_pause"
+            android:tint="#6f00ff"
             style="@style/ExoMediaButton.Pause"/>
 
 
@@ -64,6 +66,7 @@
         android:orientation="horizontal">
 
         <TextView android:id="@id/exo_position"
+            android:fontFamily="monospace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -71,7 +74,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+            android:textColor="#46a100"/>
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
@@ -80,6 +83,7 @@
             android:layout_height="26dp"/>
 
         <TextView android:id="@id/exo_duration"
+            android:fontFamily="monospace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -87,8 +91,13 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+            android:textColor="#46a100"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:src="@drawable/google_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
