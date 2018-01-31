@@ -36,6 +36,7 @@
         app:show_timeout="1000"
         app:fastforward_increment="10000"
         app:rewind_increment="10000"
+        app:controller_layout_id="@layout/custom_playback_control"
         android:keepScreenOn="true"/>
 
 </LinearLayout>
