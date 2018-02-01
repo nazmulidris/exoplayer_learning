@@ -22,17 +22,11 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
 
-    <Spinner
-        android:padding="16dp"
-        android:id="@+id/exoplayerview_activity_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/exoplayerview_activity_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:show_timeout="1000"
+        app:show_timeout="2500"
         app:fastforward_increment="10000"
         app:rewind_increment="10000"
         app:controller_layout_id="@layout/custom_playback_control"

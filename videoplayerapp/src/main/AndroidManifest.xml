@@ -25,16 +25,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".VideoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".video.VideoActivity" />
-        <activity android:name=".music1.AudioActivityNoUI" />
-        <activity android:name=".music2.AudioActivity"></activity>
     </application>
 
 </manifest>

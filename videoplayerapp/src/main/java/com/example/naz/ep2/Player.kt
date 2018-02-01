@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.naz.ep2.video
+package com.example.naz.ep2
 
 import android.content.Context
 import android.net.Uri
 import android.view.Surface
-import com.example.naz.ep2.video.Source.*
+import com.example.naz.ep2.Source.*
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioRendererEventListener
 import com.google.android.exoplayer2.decoder.DecoderCounters
@@ -34,7 +34,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.warn
 
 enum class Source {
-    local_audio, local_video, http_audio, http_video, playlist;
+    local_audio, local_video, http_audio, http_video
 }
 
 data class PlayerState(var window: Int = 0,
@@ -47,7 +47,7 @@ class PlayerHolder : AnkoLogger {
     val mPlayerView: SimpleExoPlayerView
     val mState: PlayerState
 
-    val mMediaMap: Map<Source, Uri>
+    val mMediaIdMap: Map<Source, Uri>
     val mPlayer: SimpleExoPlayer
 
     constructor(context: Context, playerView: SimpleExoPlayerView, state: PlayerState) {
@@ -56,7 +56,7 @@ class PlayerHolder : AnkoLogger {
         mState = state
 
         // List of media Uris that can be played
-        mMediaMap = mapOf<Source, Uri>(
+        mMediaIdMap = mapOf<Source, Uri>(
                 local_audio to Uri.parse("asset:///audio/cielo.mp3"),
                 local_video to Uri.parse("asset:///video/stock_footage_video.mp4"),
                 http_audio to Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3"),
@@ -69,7 +69,7 @@ class PlayerHolder : AnkoLogger {
                     // Bind to the view
                     playerView.player = this
                     // Load media
-                    prepare(buildMediaSource(state.source))
+                    prepare(buildMediaSource())
                     // Restore state
                     with(state) {
                         // Start playback when media has buffered enough (whenReady is true by default)
@@ -82,25 +82,20 @@ class PlayerHolder : AnkoLogger {
                 }
     }
 
-    fun buildMediaSource(source: Source): MediaSource {
-        return when (source) {
-            playlist -> {
-                return ConcatenatingMediaSource(
-                        createExtractorMediaSource(local_audio),
-                        createExtractorMediaSource(local_video),
-                        createExtractorMediaSource(http_audio),
-                        createExtractorMediaSource(http_video)
-                )
-            }
-            else -> { return createExtractorMediaSource(source) }
-        }
+    fun buildMediaSource(): MediaSource {
+        return ConcatenatingMediaSource(
+                createExtractorMediaSource(local_audio),
+                createExtractorMediaSource(local_video),
+                createExtractorMediaSource(http_audio),
+                createExtractorMediaSource(http_video)
+        )
     }
 
     private fun createExtractorMediaSource(source: Source): MediaSource {
         return ExtractorMediaSource.Factory(
                 DefaultDataSourceFactory(mContext,
                         "exoplayer-learning"))
-                .createMediaSource(mMediaMap.get(source))
+                .createMediaSource(mMediaIdMap.get(source))
     }
 
     fun release() {
