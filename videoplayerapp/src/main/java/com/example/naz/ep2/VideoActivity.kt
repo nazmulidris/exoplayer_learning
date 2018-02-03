@@ -17,47 +17,51 @@
 package com.example.naz.ep2
 
 import android.os.Bundle
+import android.support.v4.media.session.MediaSessionCompat
 import android.support.v7.app.AppCompatActivity
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.android.synthetic.main.activity_video.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.warn
+import org.jetbrains.anko.toast
 
 
 class VideoActivity : AppCompatActivity(), AnkoLogger {
 
-    lateinit var playerHolder: PlayerHolder
-    val state = PlayerState()
+    lateinit var mMediaSession: MediaSessionCompat
+    lateinit var mMediaSessionConnector: MediaSessionConnector
+    lateinit var mPlayerHolder: PlayerHolder
+    val mPlayerState = PlayerState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         initPlayer()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         releasePlayer()
     }
 
     fun initPlayer() {
-        playerHolder = PlayerHolder(this, exoplayerview_activity_video, state)
-        playerHolder.mPlayer.addListener(object : Player.DefaultEventListener() {
+        mPlayerHolder = PlayerHolder(this, exoplayerview_activity_video, mPlayerState)
+        mPlayerHolder.mPlayer.addListener(object : Player.DefaultEventListener() {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_ENDED -> {
-                        warn { "playback ended, show spinner" }
+                        toast("playback ended")
                     }
                     Player.STATE_READY -> when (playWhenReady) {
                         true -> {
-                            warn { "playback started, hide spinner" }
+                            toast("playback started")
                         }
                         false -> {
-                            warn { "playback paused, show spinner" }
+                            toast("playback paused")
                         }
                     }
                 }
@@ -66,7 +70,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
     }
 
     fun releasePlayer() {
-        playerHolder.release()
+        mPlayerHolder.release()
     }
 
 }

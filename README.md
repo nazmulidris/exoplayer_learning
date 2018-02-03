@@ -236,6 +236,30 @@ More info in this [codelab](https://codelabs.developers.google.com/codelabs/exop
 ## Listening to player events for UX and Quality of Experience
 More info in this [codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#5)
 
+## Customizing the UI
+More info in this [medium article](https://medium.com/google-exoplayer/customizing-exoplayers-ui-components-728cf55ee07a)
+- SimpleExoPlayerView - video playback or audio album artwork, both w/ playback controls
+- PlaybackControlView - just controller widget for playback control
+
+## Using MediaSession Connector Extension
+Make sure to import the [gradle dependency](https://github.com/google/ExoPlayer/tree/release-v2/extensions/mediasession).
+Then you can create the session and attach it to the player as shown below.
+```java
+// onCreate()
+mediaSession = new MediaSessionCompat(this, getPackageName());
+mediaSessionConnector = new MediaSessionConnector(mediaSession)
+
+// onStart() or onResume() according to API level
+initializePlayer();
+mediaSessionConnector.setPlayer(player, null, null);
+mediaSession.setActive(true);
+
+// onPause() or onStop() according to API level
+mediaSessionConnector.setPlayer(null, null, null);
+mediaSession.setActive(false);
+releasePlayer();
+```
+
 ## Loading files locally from APK
 [`DefaultDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html)
 allows local files to be loaded via the following URIs:

@@ -70,7 +70,7 @@ class PlayerHolder : AnkoLogger {
                     playerView.player = this
                     // Load media
                     prepare(buildMediaSource())
-                    // Restore state
+                    // Restore state (after onResume()/onStart())
                     with(state) {
                         // Start playback when media has buffered enough (whenReady is true by default)
                         playWhenReady = whenReady

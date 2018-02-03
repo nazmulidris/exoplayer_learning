@@ -22,14 +22,16 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
 
+    <!-- Get a list of all the attribs here - https://goo.gl/PFuCxi -->
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        app:use_artwork="true"
+        app:default_artwork="@drawable/google_logo"
         android:id="@+id/exoplayerview_activity_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:show_timeout="2500"
         app:fastforward_increment="10000"
         app:rewind_increment="10000"
-        app:controller_layout_id="@layout/custom_playback_control"
-        android:keepScreenOn="true" />
+        app:controller_layout_id="@layout/custom_playback_control" />
 
 </LinearLayout>
