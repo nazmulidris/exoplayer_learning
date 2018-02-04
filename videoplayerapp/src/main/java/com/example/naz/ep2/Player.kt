@@ -17,7 +17,9 @@
 package com.example.naz.ep2
 
 import android.content.Context
+import android.media.AudioManager
 import android.net.Uri
+import android.support.v4.media.AudioAttributesCompat
 import android.view.Surface
 import com.example.naz.ep2.Source.*
 import com.google.android.exoplayer2.*
@@ -48,7 +50,7 @@ class PlayerHolder : AnkoLogger {
     val mState: PlayerState
 
     val mMediaIdMap: Map<Source, Uri>
-    val mPlayer: SimpleExoPlayer
+    val mPlayer: ExoPlayer
 
     constructor(context: Context, playerView: SimpleExoPlayerView, state: PlayerState) {
         mContext = context
@@ -63,23 +65,33 @@ class PlayerHolder : AnkoLogger {
                 http_video to Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
         )
 
+        // Handle Audio Focus
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val audioAttributes = AudioAttributesCompat.Builder()
+                .setContentType(AudioAttributesCompat.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributesCompat.USAGE_MEDIA)
+                .build()
+
         // Create the player
-        mPlayer = ExoPlayerFactory.newSimpleInstance(mContext, DefaultTrackSelector())
-                .apply {
-                    // Bind to the view
-                    playerView.player = this
-                    // Load media
-                    prepare(buildMediaSource())
-                    // Restore state (after onResume()/onStart())
-                    with(state) {
-                        // Start playback when media has buffered enough (whenReady is true by default)
-                        playWhenReady = whenReady
-                        seekTo(window, position)
-                    }
-                    // Add logging (note, player hasn't been initialized yet, so passing this)
-                    attachLogging(this)
-                    warn { "SimpleExoPlayer created" }
-                }
+        mPlayer = AudioFocusWrapper(
+                audioAttributes,
+                audioManager,
+                ExoPlayerFactory.newSimpleInstance(mContext, DefaultTrackSelector())
+                        .apply {
+                            // Bind to the view
+                            playerView.player = this
+                            // Load media
+                            prepare(buildMediaSource())
+                            // Restore state (after onResume()/onStart())
+                            with(state) {
+                                // Start playback when media has buffered enough (whenReady is true by default)
+                                playWhenReady = whenReady
+                                seekTo(window, position)
+                            }
+                            // Add logging (note, player hasn't been initialized yet, so passing this)
+                            attachLogging(this)
+                            warn { "SimpleExoPlayer created" }
+                        })
     }
 
     fun buildMediaSource(): MediaSource {
@@ -158,7 +170,7 @@ class PlayerHolder : AnkoLogger {
             }
         })
 
-        exoPlayer.addVideoDebugListener(object: VideoRendererEventListener {
+        exoPlayer.addVideoDebugListener(object : VideoRendererEventListener {
             override fun onDroppedFrames(count: Int, elapsedMs: Long) {
             }
 

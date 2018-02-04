@@ -36,20 +36,28 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
+        mMediaSession = MediaSessionCompat(this, packageName)
+        mMediaSessionConnector = MediaSessionConnector(mMediaSession)
     }
 
     override fun onStart() {
         super.onStart()
         initPlayer()
+        // Note: do not pass a null to the 3rd param below, it will cause a NPE
+        mMediaSessionConnector.setPlayer(mPlayerHolder.mPlayer, null)
+        mMediaSession.isActive = true
     }
 
     override fun onStop() {
         super.onStop()
+        mMediaSessionConnector.setPlayer(null, null)
+        mMediaSession.isActive = false
         releasePlayer()
     }
 
     fun initPlayer() {
         mPlayerHolder = PlayerHolder(this, exoplayerview_activity_video, mPlayerState)
+
         mPlayerHolder.mPlayer.addListener(object : Player.DefaultEventListener() {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 when (playbackState) {

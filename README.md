@@ -244,20 +244,27 @@ More info in this [medium article](https://medium.com/google-exoplayer/customizi
 ## Using MediaSession Connector Extension
 Make sure to import the [gradle dependency](https://github.com/google/ExoPlayer/tree/release-v2/extensions/mediasession).
 Then you can create the session and attach it to the player as shown below.
-```java
-// onCreate()
-mediaSession = new MediaSessionCompat(this, getPackageName());
-mediaSessionConnector = new MediaSessionConnector(mediaSession)
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    ...
+    mMediaSession = MediaSessionCompat(this, packageName)
+    mMediaSessionConnector = MediaSessionConnector(mMediaSession)
+}
 
-// onStart() or onResume() according to API level
-initializePlayer();
-mediaSessionConnector.setPlayer(player, null, null);
-mediaSession.setActive(true);
+override fun onStart() {
+    ...
+    initPlayer()
+    // Note: do not pass a null to the 3rd param below, it will cause a NPE
+    mMediaSessionConnector.setPlayer(mPlayerHolder.mPlayer, null) 
+    mMediaSession.isActive = true
+}
 
-// onPause() or onStop() according to API level
-mediaSessionConnector.setPlayer(null, null, null);
-mediaSession.setActive(false);
-releasePlayer();
+override fun onStop() {
+    ...
+    mMediaSessionConnector.setPlayer(null, null, null)
+    mMediaSession.isActive = false
+    releasePlayer()
+}
 ```
 
 ## Loading files locally from APK
