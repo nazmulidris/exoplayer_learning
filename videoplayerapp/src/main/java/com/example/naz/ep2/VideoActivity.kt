@@ -81,4 +81,8 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         mPlayerHolder.release()
     }
 
+    // PIP
+    override fun onUserLeaveHint() {
+        enterPictureInPictureMode()
+    }
 }
