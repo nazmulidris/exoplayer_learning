@@ -43,13 +43,6 @@ class PlayerHolder : AnkoLogger {
     val mPlayerView: SimpleExoPlayerView
     val mState: PlayerState
     val mPlayer: ExoPlayer
-    // List of media Uris that can be played
-    val mMediaIdList: List<Uri> = listOf(
-            Uri.parse("asset:///video/stock_footage_video.mp4"),
-            Uri.parse("asset:///audio/cielo.mp3"),
-            Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3"),
-            Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
-    )
 
     constructor(context: Context, playerView: SimpleExoPlayerView, state: PlayerState) {
         mContext = context
@@ -87,8 +80,8 @@ class PlayerHolder : AnkoLogger {
 
     fun buildMediaSource(): MediaSource {
         val uriList = mutableListOf<MediaSource>()
-        mMediaIdList.forEach {
-            uriList.add(createExtractorMediaSource(it))
+        MediaLibrary.mList.forEach {
+            uriList.add(createExtractorMediaSource(it.mediaUri!!))
         }
         return ConcatenatingMediaSource(*uriList.toTypedArray())
     }

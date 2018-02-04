@@ -18,7 +18,6 @@ package com.example.naz.ep2
 
 import android.app.PictureInPictureParams
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -72,14 +71,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         // [ACTION_SKIP_PREVIOUS], [ACTION_SKIP_NEXT], [ACTION_SKIP_TO_QUEUE_ITEM]
         mMediaSessionConnector.setQueueNavigator(object : TimelineQueueNavigator(mMediaSession) {
             override fun getMediaDescription(windowIndex: Int): MediaDescriptionCompat {
-                return with(MediaDescriptionCompat.Builder()) {
-                    setDescription("Description $windowIndex")
-                    setMediaId("id $windowIndex")
-                    setMediaUri(Uri.parse("http://uri/$windowIndex"))
-                    setTitle("title: $windowIndex")
-                    setSubtitle("subTitle: $windowIndex")
-                    build()
-                }
+                return MediaLibrary.mList.get(windowIndex)
             }
         })
     }
