@@ -29,9 +29,9 @@
         android:id="@+id/exoplayerview_activity_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:show_timeout="2500"
+        app:show_timeout="5000"
         app:fastforward_increment="10000"
         app:rewind_increment="10000"
-        app:controller_layout_id="@layout/custom_playback_control" />
+        app:controller_layout_id="@layout/custom_playback_control_minimal" />
 
 </LinearLayout>

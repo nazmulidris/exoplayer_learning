@@ -16,9 +16,12 @@
 
 package com.example.naz.ep2
 
+import android.app.PictureInPictureParams
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Rational
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import kotlinx.android.synthetic.main.activity_video.*
@@ -81,8 +84,20 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         mPlayerHolder.release()
     }
 
-    // PIP
+    // Picture in Picture
     override fun onUserLeaveHint() {
-        enterPictureInPictureMode()
+
+        enterPictureInPictureMode(
+                with(PictureInPictureParams.Builder()) {
+                    val width = 16
+                    val height = 9
+                    setAspectRatio(Rational(width, height))
+                    build()
+                })
     }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        exoplayerview_activity_video.useController = !isInPictureInPictureMode
+    }
+
 }

@@ -96,8 +96,8 @@ class PlayerHolder : AnkoLogger {
 
     fun buildMediaSource(): MediaSource {
         return ConcatenatingMediaSource(
-                createExtractorMediaSource(local_audio),
                 createExtractorMediaSource(local_video),
+                createExtractorMediaSource(local_audio),
                 createExtractorMediaSource(http_audio),
                 createExtractorMediaSource(http_video)
         )
