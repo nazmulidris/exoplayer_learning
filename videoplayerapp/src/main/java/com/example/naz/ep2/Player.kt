@@ -21,7 +21,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.support.v4.media.AudioAttributesCompat
 import android.view.Surface
-import com.example.naz.ep2.Source.*
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioRendererEventListener
 import com.google.android.exoplayer2.decoder.DecoderCounters
@@ -35,35 +34,27 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.warn
 
-enum class Source {
-    local_audio, local_video, http_audio, http_video
-}
-
 data class PlayerState(var window: Int = 0,
                        var position: Long = 0,
-                       var whenReady: Boolean = true,
-                       var source: Source = local_audio)
+                       var whenReady: Boolean = true)
 
 class PlayerHolder : AnkoLogger {
     val mContext: Context
     val mPlayerView: SimpleExoPlayerView
     val mState: PlayerState
-
-    val mMediaIdMap: Map<Source, Uri>
     val mPlayer: ExoPlayer
+    // List of media Uris that can be played
+    val mMediaIdList: List<Uri> = listOf(
+            Uri.parse("asset:///video/stock_footage_video.mp4"),
+            Uri.parse("asset:///audio/cielo.mp3"),
+            Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3"),
+            Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
+    )
 
     constructor(context: Context, playerView: SimpleExoPlayerView, state: PlayerState) {
         mContext = context
         mPlayerView = playerView
         mState = state
-
-        // List of media Uris that can be played
-        mMediaIdMap = mapOf<Source, Uri>(
-                local_audio to Uri.parse("asset:///audio/cielo.mp3"),
-                local_video to Uri.parse("asset:///video/stock_footage_video.mp4"),
-                http_audio to Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3"),
-                http_video to Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4")
-        )
 
         // Handle Audio Focus
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -95,19 +86,17 @@ class PlayerHolder : AnkoLogger {
     }
 
     fun buildMediaSource(): MediaSource {
-        return ConcatenatingMediaSource(
-                createExtractorMediaSource(local_video),
-                createExtractorMediaSource(local_audio),
-                createExtractorMediaSource(http_audio),
-                createExtractorMediaSource(http_video)
-        )
+        val uriList = mutableListOf<MediaSource>()
+        mMediaIdList.forEach {
+            uriList.add(createExtractorMediaSource(it))
+        }
+        return ConcatenatingMediaSource(*uriList.toTypedArray())
     }
 
-    private fun createExtractorMediaSource(source: Source): MediaSource {
+    private fun createExtractorMediaSource(uri: Uri): MediaSource {
         return ExtractorMediaSource.Factory(
-                DefaultDataSourceFactory(mContext,
-                        "exoplayer-learning"))
-                .createMediaSource(mMediaIdMap.get(source))
+                DefaultDataSourceFactory(mContext, "exoplayer-learning"))
+                .createMediaSource(uri)
     }
 
     fun release() {

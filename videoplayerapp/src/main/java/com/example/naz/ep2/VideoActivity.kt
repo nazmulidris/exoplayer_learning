@@ -18,12 +18,15 @@ package com.example.naz.ep2
 
 import android.app.PictureInPictureParams
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Rational
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
+import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import kotlinx.android.synthetic.main.activity_video.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
@@ -36,28 +39,67 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
     lateinit var mPlayerHolder: PlayerHolder
     val mPlayerState = PlayerState()
 
+    // Android lifecycle hooks
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
-        mMediaSession = MediaSessionCompat(this, packageName)
-        mMediaSessionConnector = MediaSessionConnector(mMediaSession)
+        createMediaSession()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        releaseMediaSession()
     }
 
     override fun onStart() {
         super.onStart()
         initPlayer()
+        activateMediaSession()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        releasePlayer()
+        deactivateMediaSession()
+    }
+
+    // MediaSession related functions
+    fun createMediaSession() {
+        mMediaSession = MediaSessionCompat(this, packageName)
+        mMediaSessionConnector = MediaSessionConnector(mMediaSession)
+        // If QueueNavigator isn't set, then mMediaSessionConnector will not handle following
+        // MediaSession actions (and they won't show up in the minimized PIP activity):
+        // [ACTION_SKIP_PREVIOUS], [ACTION_SKIP_NEXT], [ACTION_SKIP_TO_QUEUE_ITEM]
+        mMediaSessionConnector.setQueueNavigator(object : TimelineQueueNavigator(mMediaSession) {
+            override fun getMediaDescription(windowIndex: Int): MediaDescriptionCompat {
+                return with(MediaDescriptionCompat.Builder()) {
+                    setDescription("Description $windowIndex")
+                    setMediaId("id $windowIndex")
+                    setMediaUri(Uri.parse("http://uri/$windowIndex"))
+                    setTitle("title: $windowIndex")
+                    setSubtitle("subTitle: $windowIndex")
+                    build()
+                }
+            }
+        })
+    }
+
+    fun activateMediaSession() {
         // Note: do not pass a null to the 3rd param below, it will cause a NPE
         mMediaSessionConnector.setPlayer(mPlayerHolder.mPlayer, null)
         mMediaSession.isActive = true
     }
 
-    override fun onStop() {
-        super.onStop()
+    fun deactivateMediaSession() {
         mMediaSessionConnector.setPlayer(null, null)
         mMediaSession.isActive = false
-        releasePlayer()
     }
 
+    fun releaseMediaSession() {
+        mMediaSession.release()
+    }
+
+    // ExoPlayer related functions
     fun initPlayer() {
         mPlayerHolder = PlayerHolder(this, exoplayerview_activity_video, mPlayerState)
 
@@ -84,9 +126,8 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
         mPlayerHolder.release()
     }
 
-    // Picture in Picture
+    // Picture in Picture related functions
     override fun onUserLeaveHint() {
-
         enterPictureInPictureMode(
                 with(PictureInPictureParams.Builder()) {
                     val width = 16
