@@ -37,16 +37,21 @@ MediaSession connector extension as well as supporting PIP and Audio Focus.
 
 # Notes on implementation (not ordered)
 
-## Quick start for player creation
+## Overview of using ExoPlayer
+
+In order to use ExoPlayer to play video files over the network or from your APK, you will need to
+create a `SimpleExoPlayer` instance and a `MediaSource`. You will also need an Activity contains a
+`SimpleExoPlayerView` which will actually render the video content that's loaded by the player.
 
 At a minimum, in order to create a `SimpleExoPlayer` you will need to provide a track selector 
 (which chooses which track of audio, video, or text to load from your media source, based on 
 bandwidth, devices, capabilities, language, etc). 
 
-You will need to create a MediaSource, which tells player where to load media from. 
-Sources of media can be the asset folder in your APK, or over HTTP, for regular media 
-files (mp3, mp4, webm, mkv, etc). You cna use the `ExtractorMediaSource` to handle these 
-sources and formats. For adaptive formats, you can use `DashMediaSource` (for DASH sources), 
+You will need to create a `MediaSource`, which tells player where to load media from. 
+Sources of media can be the `asset` folder in your APK, or over HTTP, for regular media 
+files (mp3, mp4, webm, mkv, etc).
+- You can use the `ExtractorMediaSource` to handle these sources and formats. 
+- For adaptive formats, you can use `DashMediaSource` (for DASH sources), 
 `SsMediaSource` (for SmoothStreaming sources), and `HlsMediaSource` (for HLS sources).
 
 You have to provide a `Uri` that points to your media content, which is used by the 
@@ -69,6 +74,10 @@ Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders
 to your UI, and also provides controls for audio / video playback.
 
 ### Create the ExoPlayer instance
+This code show how you might create your player instance using the fewest options, and then 
+attach it to the `SimpleExoPlayerView` (that has to be declared in the XML layout of the Activity
+that you want to display the video in).
+
 ```kotlin
 enum class Source {
     local_audio, local_video, http_audio, http_video, playlist;
@@ -126,6 +135,19 @@ class PlayerHolder : AnkoLogger {
     fun release() { ... }
 
 }
+```
+
+The `SimpleExoPlayerView` can be declared in your Activity's layout XML. Here's a simple example 
+of what this can look like.
+
+```xml
+<com.google.android.exoplayer2.ui.SimpleExoPlayerView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exoplayerview_activity_video"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+/>
 ```
 
 ### Release the ExoPlayer instance
