@@ -1,6 +1,7 @@
 Table of Contents
 =================
 
+   * [Table of Contents](#table-of-contents)
    * [ExoPlayer2 exploration](#exoplayer2-exploration)
    * [Notes on implementation (not ordered)](#notes-on-implementation-not-ordered)
       * [Quick start for player creation](#quick-start-for-player-creation)
@@ -17,6 +18,7 @@ Table of Contents
       * [Using MediaSession Connector Extension](#using-mediasession-connector-extension)
       * [Audio Focus](#audio-focus)
       * [PIP](#pip)
+      * [Loading files over HTTP using ExoPlayer](#loading-files-over-http-using-exoplayer)
       * [Loading files locally from APK using ExoPlayer](#loading-files-locally-from-apk-using-exoplayer)
    * [Resources to learn more about ExoPlayer2](#resources-to-learn-more-about-exoplayer2)
       * [Codelabs](#codelabs)
@@ -26,6 +28,8 @@ Table of Contents
       * [Changelog for ExoPlayer2](#changelog-for-exoplayer2)
       * [DASH, HLS](#dash-hls)
       * [PIP, AR](#pip-ar)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
             
 # ExoPlayer2 exploration
 
