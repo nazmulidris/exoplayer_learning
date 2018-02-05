@@ -1,8 +1,32 @@
+Table of contents
+* [ExoPlayer2 exploration](#exoplayer2-exploration)
+* [Notes on implementation](#notes-on-implementation)
+  * [Quick start for player creation](#quick-start-for-player-creation)
+  * [Slightly more control over player creation](#slightly-more-control-over-player-creation)
+  * [Creating playlists](#creating-playlists)
+  * [Saving player state between onPause() and onResume()](#saving-player-state-between-onpause-and-onresume)
+  * [Adaptive streaming](#adaptive-streaming)
+  * [Listening to player events for UX and Quality of Experience](#listening-to-player-events-for-ux-and-quality-of-experience)
+  * [Customizing the UI](#customizing-the-ui)
+  * [Using MediaSession Connector Extension](#using-mediasession-connector-extension)
+  * [Audio Focus](#audio-focus)
+  * [PIP](#pip)
+  * [Loading files locally from APK using ExoPlayer](#loading-files-locally-from-apk-using-exoplayer)
+* [Resources to learn more about ExoPlayer2](#resources-to-learn-more-about-exoplayer2)
+  * [Codelabs](#codelabs)
+  * [Audio, Video Playback](#audio-video-playback)
+  * [MediaSession](#mediasession)
+  * [Tutorials](#tutorials)
+  * [Changelog for ExoPlayer2](#changelog-for-exoplayer2)
+  * [DASH, HLS](#dash-hls)
+  * [PIP, AR](#pip-ar)
+      
 # ExoPlayer2 exploration
 
-This project is an exploration of ExoPlayer2 for audio and video playback.
+This project is an exploration of using ExoPlayer to build a video player app which uses
+MediaSession connector extension as well as supporting PIP and Audio Focus.
 
-# Notes on implementation
+# Notes on implementation (not ordered)
 
 ## Quick start for player creation
 
@@ -231,12 +255,17 @@ and playlist or media item information is saved to the `PlayerState` object, and
 the player is created again.
 
 ## Adaptive streaming
+TK provide links to get more info on HLS and DASH
+TK codelab provides lots of info on working w/ this in ExoPlayer
 More info in this [codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#4)
 
 ## Listening to player events for UX and Quality of Experience
+TK briefly talk about `which` listeners to use to provide information on `what`
 More info in this [codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#5)
 
 ## Customizing the UI
+TK more info on exploring UI customization (minimal vs complex)
+
 More info in this [medium article](https://medium.com/google-exoplayer/customizing-exoplayers-ui-components-728cf55ee07a)
 - SimpleExoPlayerView - video playback or audio album artwork, both w/ playback controls
 - PlaybackControlView - just controller widget for playback control
@@ -244,30 +273,143 @@ More info in this [medium article](https://medium.com/google-exoplayer/customizi
 ## Using MediaSession Connector Extension
 Make sure to import the [gradle dependency](https://github.com/google/ExoPlayer/tree/release-v2/extensions/mediasession).
 Then you can create the session and attach it to the player as shown below.
+
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
     ...
-    mMediaSession = MediaSessionCompat(this, packageName)
-    mMediaSessionConnector = MediaSessionConnector(mMediaSession)
+    mediaSession = MediaSessionCompat(this, packageName)
+    mediaSessionConnector = MediaSessionConnector(mediaSession)
 }
 
 override fun onStart() {
     ...
     initPlayer()
     // Note: do not pass a null to the 3rd param below, it will cause a NPE
-    mMediaSessionConnector.setPlayer(mPlayerHolder.mPlayer, null) 
-    mMediaSession.isActive = true
+    mediaSessionConnector.setPlayer(playerHolder.player, null) 
+    mediaSession.isActive = true
 }
 
 override fun onStop() {
     ...
-    mMediaSessionConnector.setPlayer(null, null, null)
-    mMediaSession.isActive = false
     releasePlayer()
+    mediaSessionConnector.setPlayer(null, null)
+    mediaSession.isActive = false
+}
+
+override fun onDestroy() {
+    ...
+    mediaSession.release()
 }
 ```
 
-## Loading files locally from APK
+Doing this will enable the basic set of [playback actions](https://developer.android.com/reference/android/media/session/PlaybackState.html#constants) 
+(`ACTION_PLAY_PAUSE`, `ACTION_PLAY`, `ACTION_PAUSE`, `ACTION_SEEK_TO`, `ACTION_FAST_FORWARD`, 
+`ACTION_REWIND`, `ACTION_STOP`). This means the connector will be able to handle these actions 
+that are generated via MediaSession from media buttons, such as those in your Bluetooth 
+headphones which allow pause, play, and fast forward, and rewind. 
+
+However, if you want to provide control over the playlist then you have to tell the connector
+to handle the `ACTION_SKIP_*` commands by adding a [`QueueNavigator`](http://google.github.io/ExoPlayer/doc/reference/index.html?com/google/android/exoplayer2/ext/mediasession/MediaSessionConnector.QueueNavigator.html). 
+Here's an example of what this might look like.
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    ...
+    mediaSession = MediaSessionCompat(this, packageName)
+    mediaSessionConnector = MediaSessionConnector(mediaSession)
+    // If QueueNavigator isn't set, then mMediaSessionConnector will not handle following
+    // MediaSession actions (and they won't show up in the minimized PIP activity):
+    // [ACTION_SKIP_PREVIOUS], [ACTION_SKIP_NEXT], [ACTION_SKIP_TO_QUEUE_ITEM]
+    mMediaSessionConnector.setQueueNavigator(object : TimelineQueueNavigator(mMediaSession) {
+        override fun getMediaDescription(windowIndex: Int): MediaDescriptionCompat {
+            return MediaLibrary.list.get(windowIndex)
+        }
+    })
+}
+
+object MediaLibrary {
+    val list = mutableListOf<MediaDescriptionCompat>()
+    init {
+        list.add(
+                with(MediaDescriptionCompat.Builder()) {
+                    setDescription("MP4 loaded from assets folder")
+                    setMediaId("1")
+                    setMediaUri(Uri.parse("asset:///video/...video.mp4"))
+                    setTitle("Stock footage")
+                    setSubtitle("Local video")
+                    build()
+                })
+        list.add(
+                with(MediaDescriptionCompat.Builder()) {
+                    setDescription("MP3 loaded over HTTP")
+                    setMediaId("2")
+                    setMediaUri(Uri.parse("http://storage.../play.mp3"))
+                    setTitle("Spoken track")
+                    setSubtitle("Streaming audio")
+                    build()
+                })
+        list.add(...)
+    }
+}
+```
+
+Using this example you can also change the code that creates creates your ExoPlayer and 
+creates it's playlist, so that the playlist is loaded from this same 'MediaLibrary' list
+object. The code to load the playlist might now look like this.
+
+```kotlin
+player = ExoPlayerFactory.newSimpleInstance(mContext, DefaultTrackSelector())
+    .apply {
+       ...
+    }
+
+fun buildMediaSource(): MediaSource {
+    val uriList = mutableListOf<MediaSource>()
+    MediaLibrary.mList.forEach {
+        uriList.add(createExtractorMediaSource(it.mediaUri!!))
+    }
+    return ConcatenatingMediaSource(*uriList.toTypedArray())
+}
+
+private fun createExtractorMediaSource(uri: Uri): MediaSource {
+    return ExtractorMediaSource.Factory(
+            DefaultDataSourceFactory(mContext, "exoplayer-learning"))
+            .createMediaSource(uri)
+}
+```
+
+You can also tell the connector that you want to handle other MediaSession actions in addition
+to the ones described above. You can find more info about each of the following in this 
+[medium article](https://medium.com/google-exoplayer/the-mediasession-extension-for-exoplayer-82b9619deb2d).
+- `MediaSessionConnector.PlaybackPreparer` - This allows you to handle actions like 
+`ACTION_PREPARE_FROM_SEARCH` and `ACTION_PREPARE_FROM_URI` which is useful if you wanted to 
+integrate with Android Auto or Google Assistant.
+- `MediaSessionConnector.PlaybackController` - This allows you to handle basic playback 
+controller actions such as `ACTION_PLAY_PAUSE` and `ACTION_SEEK_TO`.
+- `MediaSessionConnector.QueueEditor` - This allows you to handle `ACTION_SET_RATING` and other 
+`MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMAND` commands.
+- `MediaSessionConnector.CustomActionProvider` - Handles any custom actions that you want to 
+provide in your app such as providing a way to control the [repeat mode](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/ext/mediasession/RepeatModeActionProvider.html) 
+in your app.
+
+## Audio Focus
+TK - show (at a high level) how to use AudioFocusWrapper class 
+TK - link to Audio Focus details in medium for more info
+TK - make sure to link this to the PIP section (which should come after AF)
+
+## PIP
+TK - show how to hide controller when minimized
+TK - show how to set aspect ratio when minimized
+TK - show how to mark activity resizeable
+TK - show how to see the AF code in action by starting YT / GPM
+
+## Loading files locally from APK using ExoPlayer
+TK - test to see if file loading from res works using
+```
+https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/RawResourceDataSource.html
+I think one can build the Uri like this:
+RawResourceDataSource.buildRawResourceUri(R.raw.my_media_file)
+```
+
 [`DefaultDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html)
 allows local files to be loaded via the following URIs:
 - `file:///`
@@ -289,29 +431,29 @@ Also, Android doesn't allow you to add folders in the `res` folder (unlike `asse
 # Resources to learn more about ExoPlayer2
 
 ## Codelabs
-- [ ] [IO17 ExoPlayer2 codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#0)
+- [x] [IO17 ExoPlayer2 codelab](https://codelabs.developers.google.com/codelabs/exoplayer-intro/#0)
 
 ## Audio, Video Playback
-- [ ] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
-- [ ] [IO17 ExoPlayer2 Session Video](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
+- [x] [IO14 ExoPlayer Introduction Video](https://www.youtube.com/watch?v=6VjF638VObA)
+- [x] [IO17 ExoPlayer2 Session Video](https://www.youtube.com/watch?v=jAZn-J1I8Eg)
+- [x] [Why ExoPlayer2? from Google](https://medium.com/google-exoplayer/exoplayer-2-x-why-what-and-when-74fd9cb139)
 - [ ] [Caster.io course on ExoPlayer2](https://goo.gl/EeuZi1)
 - [ ] [ExoPlayer2 for audio, video playback sample](https://goo.gl/1d4bkY)
 - [ ] [ExoPlayer2 play audio + video](https://goo.gl/eVbEoD)
-- [x] [ExoPlayer2 Overview](https://goo.gl/ZynVzk)
-- [x] [Why ExoPlayer2? from Google](https://goo.gl/tny1Rz)
+- [ ] [ExoPlayer2 Overview](https://goo.gl/ZynVzk)
 
 ## MediaSession 
-- [ ] [MediaSession extension for ExoPlayer2](https://medium.com/google-exoplayer/the-mediasession-extension-for-exoplayer-82b9619deb2d)
+- [x] [MediaSession extension for ExoPlayer2](https://medium.com/google-exoplayer/the-mediasession-extension-for-exoplayer-82b9619deb2d)
 
 ## Tutorials
 - [ ] [Using ExoPlayer and Kotlin to build simple audio app](https://medium.com/mindorks/implementing-exoplayer-for-beginners-in-kotlin-c534706bce4b)
 
 ## Changelog for ExoPlayer2
-- [ ] [Latest changes for 2.6.1](https://medium.com/google-exoplayer/exoplayer-2-6-1-whats-new-a9e54bffffc5)
+- [x] [Latest changes for 2.6.1](https://medium.com/google-exoplayer/exoplayer-2-6-1-whats-new-a9e54bffffc5)
 
 ## DASH, HLS
 - [x] [Dash, HLS](https://goo.gl/r9fXXf)
 - [x] [Dash benefits over HLS, etc](https://goo.gl/SNvMgQ)
 
 ## PIP, AR
-- [x] [PIP, AR](https://goo.gl/1GoECE)
+- [x] [PIP, AR](https://medium.com/google-developers/making-magic-moments-with-picture-in-picture-e02964bf75ae)
