@@ -413,6 +413,10 @@ TK - show how to set aspect ratio when minimized
 TK - show how to mark activity resizeable
 TK - show how to see the AF code in action by starting YT / GPM
 
+## Loading files over HTTP using ExoPlayer
+TK - if files are loaded over network then `android.permission.INTERNET` needs to be added
+`<uses-permission android:name="android.permission.INTERNET" />`
+
 ## Loading files locally from APK using ExoPlayer
 TK - test to see if file loading from res works using
 ```
