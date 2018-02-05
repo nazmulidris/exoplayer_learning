@@ -49,12 +49,21 @@ files (mp3, mp4, webm, mkv, etc). You cna use the `ExtractorMediaSource` to hand
 sources and formats. For adaptive formats, you can use `DashMediaSource` (for DASH sources), 
 `SsMediaSource` (for SmoothStreaming sources), and `HlsMediaSource` (for HLS sources).
 
-You have to provide a `URI` that points to your media content, which is used by the 
+You have to provide a `Uri` that points to your media content, which is used by the 
 `MediaSource` to actually load and prepare the content for playback.
+
+If you are loading media files over HTTP then the following permission 
+needs to be added to your `AndroidManifest.xml` file.
+`<uses-permission android:name="android.permission.INTERNET" />`
 
 You must also prepare the player, which tells it to start loading the data (and it might
 have to buffer this data over the network). You also have to set a flag `playWhenReady`. 
-true means play, and false means pause playback (after enough content has been buffered).
+`true` means play, and `false` means pause playback (after enough content has been buffered). 
+This is the `play` and `pause` functions for ExoPlayer.
+```
+playWhenReady = true -> means play
+playWhenReady = false -> means pause
+```
 
 Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
 to your UI, and also provides controls for audio / video playback.
@@ -415,10 +424,6 @@ TK - show how to hide controller when minimized
 TK - show how to set aspect ratio when minimized
 TK - show how to mark activity resizeable
 TK - show how to see the AF code in action by starting YT / GPM
-
-## Loading files over HTTP using ExoPlayer
-TK - if files are loaded over network then `android.permission.INTERNET` needs to be added
-`<uses-permission android:name="android.permission.INTERNET" />`
 
 ## Loading files locally from APK using ExoPlayer
 TK - test to see if file loading from res works using
