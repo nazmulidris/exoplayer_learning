@@ -50,6 +50,7 @@ true means play, and false means pause playback (after enough content has been b
 Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
 to your UI, and also provides controls for audio / video playback.
 
+### Create the ExoPlayer instance
 ```kotlin
 enum class Source {
     local_audio, local_video, http_audio, http_video, playlist;
@@ -109,6 +110,7 @@ class PlayerHolder : AnkoLogger {
 }
 ```
 
+### Release the ExoPlayer instance
 When you're done with playback, be sure to release the player, since it consumes resources 
 like network, memory and system codecs. Codecs are a globally shared resource on the 
 phone, and there might be a limited number of them available depending on the specific 
@@ -130,7 +132,18 @@ fun release() {
     }
 ```
 
-You have to integrate with the Android Activity lifecycle in order to release and create the 
+#### Re-use the same ExoPlayer instance
+If you would like to re-use your `ExoPlayer` then make sure to call: 
+1. `stop()`
+2. `seekTo(0, 0)`
+
+This will release all the resources (codecs, MediaSources, etc) held by the player. In order to
+use the player again, call `prepare(MediaSource)` and set `playWhenReady` as show in the gists 
+above.
+
+### Activity Lifecycle Integration
+
+You have to integrate with the Android Activity lifecycle in order to create, use, and release the 
 player. Here's a simple example of what this can look like.
 
 ```kotlin
@@ -162,15 +175,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
 }
 ```
 
-If you would like to re-use your `ExoPlayer` then make sure to call: 
-1. `stop()`
-2. `seekTo(0, 0)`
-
-This will release all the resources (codecs, MediaSources, etc) held by the player. In order to
-use the player again, call `prepare(MediaSource)` and set `playWhenReady` as show in the gists 
-above.
-
-## Slightly more control over player creation
+### Slightly more control over player creation
 
 You can also use a different signature of `ExoPlayerFactor.newSimpleInstance(...)` factory method 
 to create your player, that accepts a few more parameters. You can also pass a 
