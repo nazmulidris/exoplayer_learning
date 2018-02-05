@@ -1,7 +1,6 @@
 Table of Contents
 =================
 
-   * [Table of Contents](#table-of-contents)
    * [ExoPlayer2 exploration](#exoplayer2-exploration)
    * [Notes on implementation (not ordered)](#notes-on-implementation-not-ordered)
       * [Quick start for player creation](#quick-start-for-player-creation)
