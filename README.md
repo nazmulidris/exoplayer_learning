@@ -468,10 +468,8 @@ Notes:
 Also, Android doesn't allow you to add folders in the `res` folder (unlike `assets`).
 - You can use [`RawResourceDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/RawResourceDataSource.html)
 to build a `Uri` that points to a resource id in the `res` folder, eg: `RawResourceDataSource.buildRawResourceUri(R.raw.my_media_file)`. 
-However, this will produce a 
-[`DataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DataSource.html) 
-and not a [`MediaSource`](https://google.github.io/ExoPlayer/doc/reference/index.html?com/google/android/exoplayer2/source/MediaSource.html) 
-(which is what is needed by the extractor to load the media).
+However, the ExtractorMediaSource doesn't yet (as of v2.6.1) support this type of 
+[`DataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DataSource.html).
 
 # Resources to learn more about ExoPlayer2
 
