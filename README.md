@@ -466,8 +466,7 @@ Notes:
 - ExoPlayer doesn't allow loading files from the `res` folder using 
 `Uri.parse("android.resource://${packageName}/${R.raw.id})"`. 
 Also, Android doesn't allow you to add folders in the `res` folder (unlike `assets`).
-- You can use [`RawResourceDataSource`](https://google.github
-.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/RawResourceDataSource.html)
+- You can use [`RawResourceDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/RawResourceDataSource.html)
 to build a `Uri` that points to a resource id in the `res` folder, eg: `RawResourceDataSource.buildRawResourceUri(R.raw.my_media_file)`. 
 However, this will produce a 
 [`DataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DataSource.html) 
