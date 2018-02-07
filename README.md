@@ -70,7 +70,7 @@ playWhenReady = true -> means play
 playWhenReady = false -> means pause
 ```
 
-Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
+Finaly, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
 to your UI, and also provides controls for audio / video playback.
 
 ### Create the ExoPlayer instance
@@ -448,13 +448,6 @@ TK - show how to mark activity resizeable
 TK - show how to see the AF code in action by starting YT / GPM
 
 ## Loading files locally from APK using ExoPlayer
-TK - test to see if file loading from res works using
-```
-https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/RawResourceDataSource.html
-I think one can build the Uri like this:
-RawResourceDataSource.buildRawResourceUri(R.raw.my_media_file)
-```
-
 [`DefaultDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DefaultDataSource.html)
 allows local files to be loaded via the following URIs:
 - `file:///`
@@ -472,6 +465,13 @@ under the `assets` folder):
 Note that ExoPlayer doesn't allow loading files from the `res` folder using 
 `Uri.parse("android.resource://${packageName}/${R.raw.id})"`. 
 Also, Android doesn't allow you to add folders in the `res` folder (unlike `assets`).
+
+Note - You can use [`RawResourceDataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/RawResourceDataSource.html)
+to build a `Uri` that points to a resource id in the `res` folder, eg: `RawResourceDataSource.buildRawResourceUri(R.raw.my_media_file)`. 
+However, this will produce a 
+[`DataSource`](https://google.github.io/ExoPlayer/doc/reference/com/google/android/exoplayer2/upstream/DataSource.html) 
+and not a [`MediaSource`](https://google.github.io/ExoPlayer/doc/reference/index.html?com/google/android/exoplayer2/source/MediaSource.html) 
+(which is what is needed by the extractor to load the media).
 
 # Resources to learn more about ExoPlayer2
 
