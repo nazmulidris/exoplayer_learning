@@ -32,11 +32,10 @@ import org.jetbrains.anko.toast
 
 
 class VideoActivity : AppCompatActivity(), AnkoLogger {
-
-    lateinit var mMediaSession: MediaSessionCompat
-    lateinit var mMediaSessionConnector: MediaSessionConnector
-    lateinit var mPlayerHolder: PlayerHolder
-    val mPlayerState = PlayerState()
+    lateinit var mediaSession: MediaSessionCompat
+    lateinit var mediaSessionConnector: MediaSessionConnector
+    lateinit var playerHolder: PlayerHolder
+    val playerState = PlayerState()
 
     // Android lifecycle hooks
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,38 +63,38 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
 
     // MediaSession related functions
     fun createMediaSession() {
-        mMediaSession = MediaSessionCompat(this, packageName)
-        mMediaSessionConnector = MediaSessionConnector(mMediaSession)
+        mediaSession = MediaSessionCompat(this, packageName)
+        mediaSessionConnector = MediaSessionConnector(mediaSession)
         // If QueueNavigator isn't set, then mMediaSessionConnector will not handle following
         // MediaSession actions (and they won't show up in the minimized PIP activity):
         // [ACTION_SKIP_PREVIOUS], [ACTION_SKIP_NEXT], [ACTION_SKIP_TO_QUEUE_ITEM]
-        mMediaSessionConnector.setQueueNavigator(object : TimelineQueueNavigator(mMediaSession) {
+        mediaSessionConnector.setQueueNavigator(object : TimelineQueueNavigator(mediaSession) {
             override fun getMediaDescription(windowIndex: Int): MediaDescriptionCompat {
-                return MediaLibrary.mList.get(windowIndex)
+                return MediaLibrary[windowIndex]
             }
         })
     }
 
     fun activateMediaSession() {
         // Note: do not pass a null to the 3rd param below, it will cause a NPE
-        mMediaSessionConnector.setPlayer(mPlayerHolder.mPlayer, null)
-        mMediaSession.isActive = true
+        mediaSessionConnector.setPlayer(playerHolder.player, null)
+        mediaSession.isActive = true
     }
 
     fun deactivateMediaSession() {
-        mMediaSessionConnector.setPlayer(null, null)
-        mMediaSession.isActive = false
+        mediaSessionConnector.setPlayer(null, null)
+        mediaSession.isActive = false
     }
 
     fun releaseMediaSession() {
-        mMediaSession.release()
+        mediaSession.release()
     }
 
     // ExoPlayer related functions
     fun initPlayer() {
-        mPlayerHolder = PlayerHolder(this, exoplayerview_activity_video, mPlayerState)
+        playerHolder = PlayerHolder(this, exoplayerview_activity_video, playerState)
 
-        mPlayerHolder.mPlayer.addListener(object : Player.DefaultEventListener() {
+        playerHolder.player.addListener(object : Player.DefaultEventListener() {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_ENDED -> {
@@ -115,7 +114,7 @@ class VideoActivity : AppCompatActivity(), AnkoLogger {
     }
 
     fun releasePlayer() {
-        mPlayerHolder.release()
+        playerHolder.release()
     }
 
     // Picture in Picture related functions

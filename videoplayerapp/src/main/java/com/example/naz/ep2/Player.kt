@@ -38,41 +38,35 @@ data class PlayerState(var window: Int = 0,
                        var position: Long = 0,
                        var whenReady: Boolean = true)
 
-class PlayerHolder : AnkoLogger {
-    val mContext: Context
-    val mPlayerView: SimpleExoPlayerView
-    val mState: PlayerState
-    val mPlayer: ExoPlayer
+class PlayerHolder(val context: Context,
+                   val playerView: SimpleExoPlayerView,
+                   val playerState: PlayerState) : AnkoLogger {
+    val player: ExoPlayer
 
-    constructor(context: Context, playerView: SimpleExoPlayerView, state: PlayerState) {
-        mContext = context
-        mPlayerView = playerView
-        mState = state
-
-        // Handle Audio Focus
+    init {
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val audioAttributes = AudioAttributesCompat.Builder()
                 .setContentType(AudioAttributesCompat.CONTENT_TYPE_MUSIC)
                 .setUsage(AudioAttributesCompat.USAGE_MEDIA)
                 .build()
-
-        // Create the player
-        mPlayer = AudioFocusWrapper(
+        player = AudioFocusWrapper(
                 audioAttributes,
                 audioManager,
-                ExoPlayerFactory.newSimpleInstance(mContext, DefaultTrackSelector())
+                ExoPlayerFactory.newSimpleInstance(this.context, DefaultTrackSelector())
                         .apply {
                             // Bind to the view
                             playerView.player = this
                             // Load media
                             prepare(buildMediaSource())
                             // Restore state (after onResume()/onStart())
-                            with(state) {
-                                // Start playback when media has buffered enough (whenReady is true by default)
+                            with(playerState) {
+                                // Start playback when media has buffered enough
+                                // (whenReady is true by default)
                                 playWhenReady = whenReady
                                 seekTo(window, position)
                             }
-                            // Add logging (note, player hasn't been initialized yet, so passing this)
+                            // Add logging
+                            // (note, player hasn't been initialized yet, so passing this)
                             attachLogging(this)
                             warn { "SimpleExoPlayer created" }
                         })
@@ -80,7 +74,7 @@ class PlayerHolder : AnkoLogger {
 
     fun buildMediaSource(): MediaSource {
         val uriList = mutableListOf<MediaSource>()
-        MediaLibrary.mList.forEach {
+        MediaLibrary.list.forEach {
             uriList.add(createExtractorMediaSource(it.mediaUri!!))
         }
         return ConcatenatingMediaSource(*uriList.toTypedArray())
@@ -88,14 +82,14 @@ class PlayerHolder : AnkoLogger {
 
     private fun createExtractorMediaSource(uri: Uri): MediaSource {
         return ExtractorMediaSource.Factory(
-                DefaultDataSourceFactory(mContext, "exoplayer-learning"))
+                DefaultDataSourceFactory(context, "exoplayer-learning"))
                 .createMediaSource(uri)
     }
 
     fun release() {
-        with(mPlayer) {
+        with(player) {
             // Save state
-            with(mState) {
+            with(playerState) {
                 position = currentPosition
                 window = currentWindowIndex
                 whenReady = playWhenReady

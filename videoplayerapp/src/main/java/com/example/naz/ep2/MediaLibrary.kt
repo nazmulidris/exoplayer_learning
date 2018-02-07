@@ -19,10 +19,13 @@ package com.example.naz.ep2
 import android.net.Uri
 import android.support.v4.media.MediaDescriptionCompat
 
-object MediaLibrary {
-    val mList = mutableListOf<MediaDescriptionCompat>()
+open class MediaLibrary(
+        val list: MutableList<MediaDescriptionCompat>) :
+        List<MediaDescriptionCompat> by list {
+    companion object : MediaLibrary(mutableListOf<MediaDescriptionCompat>())
+
     init {
-        mList.add(
+        list.add(
                 with(MediaDescriptionCompat.Builder()) {
                     setDescription("MP4 loaded from assets folder")
                     setMediaId("1")
@@ -31,7 +34,7 @@ object MediaLibrary {
                     setSubtitle("Local video")
                     build()
                 })
-        mList.add(
+        list.add(
                 with(MediaDescriptionCompat.Builder()) {
                     setDescription("MP3 loaded from assets folder")
                     setMediaId("2")
@@ -40,7 +43,7 @@ object MediaLibrary {
                     setSubtitle("Local audio")
                     build()
                 })
-        mList.add(
+        list.add(
                 with(MediaDescriptionCompat.Builder()) {
                     setDescription("MP3 loaded over HTTP")
                     setMediaId("3")
@@ -49,7 +52,7 @@ object MediaLibrary {
                     setSubtitle("Streaming audio")
                     build()
                 })
-        mList.add(
+        list.add(
                 with(MediaDescriptionCompat.Builder()) {
                     setDescription("MP4 loaded over HTTP")
                     setMediaId("4")
