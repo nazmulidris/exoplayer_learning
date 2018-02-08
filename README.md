@@ -1,9 +1,10 @@
 Table of Contents
 =================
 
+   * [Table of Contents](#table-of-contents)
    * [ExoPlayer2 exploration](#exoplayer2-exploration)
    * [Notes on implementation (not ordered)](#notes-on-implementation-not-ordered)
-      * [Quick start for player creation](#quick-start-for-player-creation)
+      * [Overview of using ExoPlayer](#overview-of-using-exoplayer)
          * [Create the ExoPlayer instance](#create-the-exoplayer-instance)
          * [Release the ExoPlayer instance](#release-the-exoplayer-instance)
             * [Re-use the same ExoPlayer instance](#re-use-the-same-exoplayer-instance)
@@ -15,9 +16,9 @@ Table of Contents
       * [Listening to player events for UX and Quality of Experience](#listening-to-player-events-for-ux-and-quality-of-experience)
       * [Customizing the UI](#customizing-the-ui)
       * [Using MediaSession Connector Extension](#using-mediasession-connector-extension)
+         * [Note on Java varargs and Kotlin](#note-on-java-varargs-and-kotlin)
       * [Audio Focus](#audio-focus)
       * [PIP](#pip)
-      * [Loading files over HTTP using ExoPlayer](#loading-files-over-http-using-exoplayer)
       * [Loading files locally from APK using ExoPlayer](#loading-files-locally-from-apk-using-exoplayer)
    * [Resources to learn more about ExoPlayer2](#resources-to-learn-more-about-exoplayer2)
       * [Codelabs](#codelabs)
