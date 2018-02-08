@@ -22,7 +22,7 @@ import android.support.v4.media.MediaDescriptionCompat
 open class MediaLibrary(
         val list: MutableList<MediaDescriptionCompat>) :
         List<MediaDescriptionCompat> by list {
-    companion object : MediaLibrary(mutableListOf<MediaDescriptionCompat>())
+    companion object : MediaLibrary(mutableListOf())
 
     init {
         // More creative commons, creative commons videos - https://www.blender.org/about/projects/
