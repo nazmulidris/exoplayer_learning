@@ -63,11 +63,11 @@ needs to be added to your `AndroidManifest.xml` file.
 `<uses-permission android:name="android.permission.INTERNET" />`
 
 You must also prepare the player, which tells it to start loading the data (and it might
-have to buffer this data over the network). You also have to set a flag `playWhenReady`. 
-`false` means pause, and `true` means start playback (after enough content has been buffered). 
-This is how you invoke the `play` and `pause` functions on ExoPlayer.
+have to buffer some of this data over the network before it can start playback. You also have to 
+set a flag `playWhenReady`, which is how you tell ExoPlayer to play or pause.
+
 ```
-playWhenReady = true  -> play
+playWhenReady = true  -> play (start playback after enough content is buffered)
 playWhenReady = false -> pause
 ```
 
