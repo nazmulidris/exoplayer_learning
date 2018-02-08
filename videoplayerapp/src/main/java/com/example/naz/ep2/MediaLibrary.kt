@@ -41,7 +41,8 @@ open class MediaLibrary(
                     setDescription("MP4 loaded over HTTP")
                     setMediaId("2")
                     // License - https://archive.org/details/ElephantsDream
-                    setMediaUri(Uri.parse("https://archive.org/download/ElephantsDream/ed_hd.mp4"))
+                    //setMediaUri(Uri.parse("https://archive.org/download/ElephantsDream/ed_hd.mp4"))
+                    setMediaUri(Uri.parse("asset:///ed_hd.mp4"))
                     setTitle("Short film Elephants Dream")
                     setSubtitle("Streaming video")
                     build()
