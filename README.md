@@ -347,8 +347,9 @@ override fun onDestroy() {
 }
 ```
 
-Note on Java varargs and Kotlin - ExoPlayer is written in Java, and the [`setPlayer()`](https://goo.gl/M7pwmg)
-method accepts varargs as the 3rd parameter. When calling this method from Kotlin, if you don't 
+Note on Java varargs and Kotlin - ExoPlayer and the MediaSession connector extension are written
+in Java, and the [`setPlayer()`](https://goo.gl/M7pwmg) method accepts varargs as the 3rd 
+parameter. When calling this method from Kotlin, if you don't 
 pass a 3rd argument, then everything works as you would expect when using Java. However, if you 
 pass `null` as the 3rd argument then this will thrown a `NullPointerException`. In order to 
 avoid this NPE you have to use the [spread operator `*`](https://goo.gl/y13f9G) in order to pass a 
