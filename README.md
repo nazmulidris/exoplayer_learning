@@ -71,7 +71,7 @@ playWhenReady = true  -> play (start playback after enough content is buffered)
 playWhenReady = false -> pause
 ```
 
-Finaly, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
+Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
 to your UI, and also provides controls for audio / video playback.
 
 ### Create the ExoPlayer instance
