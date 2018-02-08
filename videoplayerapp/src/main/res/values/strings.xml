@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">EP2</string>
+    <string name="app_name">Video player app</string>
     <string name="title_activity_audio">AudioActivity</string>
     <string name="title_activity_video">VideoActivity</string>
 </resources>
