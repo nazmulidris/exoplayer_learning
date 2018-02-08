@@ -358,13 +358,8 @@ list of arguments that you would like to pass, then you have to use the
 parameter. Here's an example of this.
 
 ```kotlin
-fun buildMediaSource(): MediaSource {
-        val uriList = mutableListOf<MediaSource>()
-        MediaLibrary.list.forEach {
-            uriList.add(createExtractorMediaSource(it.mediaUri!!))
-        }
-        return ConcatenatingMediaSource(*uriList.toTypedArray())
-    }
+val uriList = mutableListOf<MediaSource>()
+val mediaSource = ConcatenatingMediaSource(*uriList.toTypedArray())
 ```
 
 Doing this will enable the basic set of [playback actions](https://developer.android.com/reference/android/media/session/PlaybackState.html#constants) 
