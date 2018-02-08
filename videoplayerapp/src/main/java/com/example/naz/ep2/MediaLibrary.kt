@@ -25,40 +25,44 @@ open class MediaLibrary(
     companion object : MediaLibrary(mutableListOf<MediaDescriptionCompat>())
 
     init {
+        // More creative commons, creative commons videos - https://www.blender.org/about/projects/
         list.add(
                 with(MediaDescriptionCompat.Builder()) {
-                    setDescription("MP4 loaded from assets folder")
+                    setDescription("MP4 loaded over HTTP")
                     setMediaId("1")
-                    setMediaUri(Uri.parse("asset:///video/stock_footage_video.mp4"))
-                    setTitle("Stock footage")
-                    setSubtitle("Local video")
-                    build()
-                })
-        list.add(
-                with(MediaDescriptionCompat.Builder()) {
-                    setDescription("MP3 loaded from assets folder")
-                    setMediaId("2")
-                    setMediaUri(Uri.parse("asset:///audio/cielo.mp3"))
-                    setTitle("Music")
-                    setSubtitle("Local audio")
-                    build()
-                })
-        list.add(
-                with(MediaDescriptionCompat.Builder()) {
-                    setDescription("MP3 loaded over HTTP")
-                    setMediaId("3")
-                    setMediaUri(Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3"))
-                    setTitle("Spoken track")
-                    setSubtitle("Streaming audio")
+                    // License - https://peach.blender.org/download/
+                    setMediaUri(Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"))
+                    setTitle("Short film Big Buck Bunny")
+                    setSubtitle("Streaming video")
                     build()
                 })
         list.add(
                 with(MediaDescriptionCompat.Builder()) {
                     setDescription("MP4 loaded over HTTP")
-                    setMediaId("4")
-                    setMediaUri(Uri.parse("http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"))
-                    setTitle("Short film")
+                    setMediaId("2")
+                    // License - https://archive.org/details/ElephantsDream
+                    setMediaUri(Uri.parse("https://archive.org/download/ElephantsDream/ed_hd.mp4"))
+                    setTitle("Short film Elephants Dream")
                     setSubtitle("Streaming video")
+                    build()
+                })
+        list.add(
+                with(MediaDescriptionCompat.Builder()) {
+                    setDescription("MOV loaded over HTTP")
+                    setMediaId("3")
+                    // License - https://mango.blender.org/sharing/
+                    setMediaUri(Uri.parse("http://ftp.nluug.nl/pub/graphics/blender/demo/movies/ToS/ToS-4k-1920.mov"))
+                    setTitle("Short film Tears of Steel")
+                    setSubtitle("Streaming audio")
+                    build()
+                })
+        list.add(
+                with(MediaDescriptionCompat.Builder()) {
+                    setDescription("MP3 loaded over HTTP")
+                    setMediaId("4")
+                    setMediaUri(Uri.parse("http://storage.googleapis.com/exoplayer-test-media-0/play.mp3"))
+                    setTitle("Spoken track")
+                    setSubtitle("Streaming audio")
                     build()
                 })
     }
