@@ -75,9 +75,9 @@ Finally, you have to attach the player to a `SimpleExoPlayerView`, which renders
 to your UI, and also provides controls for audio / video playback.
 
 ### Create the ExoPlayer instance
-This code show how you might create your player instance using the fewest options, and then 
-attach it to the `SimpleExoPlayerView` (that has to be declared in the XML layout of the Activity
-that you want to display the video in).
+This code shows how you might create your player instance using the fewest options, and then 
+attach it to the [`SimpleExoPlayerView`](https://goo.gl/eroZVT) (that has to be declared in the 
+XML layout of the Activity that you want to display the video in).
 
 ```kotlin
 enum class Source {
@@ -278,8 +278,8 @@ fun buildMediaSource(source: Source): MediaSource {
 
 `ConcatenatingMediaSource` creates a static playlist. If you want a dynamic playlist then you
 can use `DynamicContactenatingMediaSource`. Both of them will combine media sources seamlessly
-and handle buffering for the entire playlist. Here is a [medium article](https://medium.com/google-exoplayer/exoplayer-2-x-mediasource-composition-6c285fcbca1f) 
-on the details of `MediaSource` composition.
+and handle buffering for the entire playlist. To learn more about the details of `MediaSource` 
+composition, please read this [medium article](https://goo.gl/jJB3W8). 
 
 ## Saving player state between onPause() and onResume()
 
