@@ -347,8 +347,8 @@ override fun onDestroy() {
 }
 ```
 
-Note on Java varargs and Kotlin - ExoPlayer is written in Java, and the `setPlayer()` method 
-accepts varargs as the 3rd parameter. When calling this method from Kotlin, if you leave out 
+Note on Java varargs and Kotlin - ExoPlayer is written in Java, and the [`setPlayer()`](https://goo.gl/M7pwmg)
+method accepts varargs as the 3rd parameter. When calling this method from Kotlin, if you leave out 
 the 3rd param then everything will work just fine. However, if you pass `null` as the 3rd 
 argument then this will thrown a `NullPointerException`. In order to avoid this NPE you have to 
 use the [spread operator `*`](https://kotlinlang.org/docs/reference/functions.html#variable-number-of-arguments-varargs)
