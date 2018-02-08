@@ -348,11 +348,11 @@ override fun onDestroy() {
 ```
 
 Note on Java varargs and Kotlin - ExoPlayer is written in Java, and the [`setPlayer()`](https://goo.gl/M7pwmg)
-method accepts varargs as the 3rd parameter. When calling this method from Kotlin, if you leave out 
-the 3rd param then everything will work just fine. However, if you pass `null` as the 3rd 
-argument then this will thrown a `NullPointerException`. In order to avoid this NPE you have to 
-use the [spread operator `*`](https://kotlinlang.org/docs/reference/functions.html#variable-number-of-arguments-varargs)
-in order to pass a list of arguments to the Java varargs parameter.
+method accepts varargs as the 3rd parameter. When calling this method from Kotlin, if you don't 
+pass a 3rd argument, then everything works as expected (in Java). However, if you pass `null` as 
+the 3rd argument then this will thrown a `NullPointerException`. In order to avoid this NPE you have to 
+use the [spread operator `*`](https://goo.gl/y13f9G) in order to pass a list of arguments to the 
+Java varargs parameter.
 
 Doing this will enable the basic set of [playback actions](https://developer.android.com/reference/android/media/session/PlaybackState.html#constants) 
 (`ACTION_PLAY_PAUSE`, `ACTION_PLAY`, `ACTION_PAUSE`, `ACTION_SEEK_TO`, `ACTION_FAST_FORWARD`, 
