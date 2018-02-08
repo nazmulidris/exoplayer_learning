@@ -64,11 +64,11 @@ needs to be added to your `AndroidManifest.xml` file.
 
 You must also prepare the player, which tells it to start loading the data (and it might
 have to buffer this data over the network). You also have to set a flag `playWhenReady`. 
-`true` means play, and `false` means pause playback (after enough content has been buffered). 
+`false` means pause, and `true` means start playback (after enough content has been buffered). 
 This is how you invoke the `play` and `pause` functions on ExoPlayer.
 ```
-playWhenReady = true -> means play
-playWhenReady = false -> means pause
+playWhenReady = true  -> play
+playWhenReady = false -> pause
 ```
 
 Finaly, you have to attach the player to a `SimpleExoPlayerView`, which renders the video 
