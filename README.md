@@ -354,7 +354,17 @@ pass a 3rd argument, then everything works as you would expect when using Java. 
 pass `null` as the 3rd argument then this will thrown a `NullPointerException`. If you do have a 
 list of arguments that you would like to pass, then you have to use the 
 [spread operator `*`](https://goo.gl/y13f9G) in order to pass a list of arguments to the Java varargs 
-parameter.
+parameter. Here's an example of this.
+
+```kotlin
+fun buildMediaSource(): MediaSource {
+        val uriList = mutableListOf<MediaSource>()
+        MediaLibrary.list.forEach {
+            uriList.add(createExtractorMediaSource(it.mediaUri!!))
+        }
+        return ConcatenatingMediaSource(*uriList.toTypedArray())
+    }
+```
 
 Doing this will enable the basic set of [playback actions](https://developer.android.com/reference/android/media/session/PlaybackState.html#constants) 
 (`ACTION_PLAY_PAUSE`, `ACTION_PLAY`, `ACTION_PAUSE`, `ACTION_SEEK_TO`, `ACTION_FAST_FORWARD`, 
